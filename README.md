@@ -3,7 +3,7 @@
 An original UIKit / Storyboard companion to [Lorca](https://github.com/lalithu/lorca).
 
 **Unit 8 — Capstone Milestone 1 • November 4, 2026**  
-**Status:** Digital planning package prepared; course submission remains outstanding; iOS implementation has not started. All application features below are unchecked intentionally. The existing Mac application is prior work and is not claimed as new capstone implementation.
+**Status:** Digital planning package prepared; course submission confirmed; iOS implementation has not started. All application features below are unchecked intentionally. The existing Mac application is prior work and is not claimed as new capstone implementation.
 
 ## Table of Contents
 1. [Overview](#overview)
@@ -126,7 +126,7 @@ Not created. Static flow diagrams are not an interactive prototype, and no proto
 - [x] Sprint goals, feasibility risks, and planned acceptance checks: [SPRINT_PLAN.md](SPRINT_PLAN.md).
 - [x] Public capstone repository: [lalithu/lorca-ios](https://github.com/lalithu/lorca-ios). Planning documents, digital wireframes, and hand-sketch photo committed.
 - [x] Photographed hand-sketched core screens and navigation uploaded and embedded.
-- [ ] Course submission through Unit 8 Projects.
+- [x] Submitted through Unit 8 Projects on November 4, 2026 with the planning walkthrough video, 4 hours, and clarification note. CodePath confirmed receipt.
 
 **Progress:** Planning artifacts prepared. No Xcode project, iOS app code, Mac bridge, or mobile transport has been implemented for this milestone. A [Milestone 1 planning walkthrough](https://youtu.be/8zSFkHlXAAA) is included; it demonstrates planning work rather than a functioning iOS build. The rubric classifies checked-off app features and a build-progress video as Unit 8 bonus work; the Projects page also uses mandatory-sounding video wording. See [submission checklist](SUBMISSION_CHECKLIST.md) for that unresolved wording conflict.
 
