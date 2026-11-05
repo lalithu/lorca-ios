@@ -132,6 +132,10 @@ Not created. Static flow diagrams are not an interactive prototype, and no proto
 
 **Next:** validate the Mac connection architecture, then build the UIKit/Storyboard flow and real chat behavior in bounded sprints. Preserve this milestone entry when adding later progress, challenges, and demo videos.
 
+### Note on the Unit 8 Video Requirement
+
+I interpreted this submission as the planning milestone: brainstorming, product specification, and wireframes. The grading rubric lists the Unit 8 build-progress video as bonus work, while the Projects page also uses required-video wording in the development section. iOS implementation has not started, so no working-app demo is included. If a video is required for this planning submission, please let me know; I can provide it as soon as possible.
+
 ## Schema
 
 This section will be completed in Unit 9, as directed by the course template. The notes below are planning candidates, not implemented contracts.
