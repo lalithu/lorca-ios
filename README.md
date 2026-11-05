@@ -128,13 +128,19 @@ Not created. Static flow diagrams are not an interactive prototype, and no proto
 - [x] Photographed hand-sketched core screens and navigation uploaded and embedded.
 - [ ] Course submission through Unit 8 Projects.
 
-**Progress:** Planning artifacts prepared. No Xcode project, iOS app code, Mac bridge, or mobile transport has been implemented for this milestone. No build video exists. The rubric classifies checked-off app features and a build-progress video as Unit 8 bonus work; the Projects page also uses mandatory-sounding video wording. See [submission checklist](SUBMISSION_CHECKLIST.md) for that unresolved wording conflict.
+**Progress:** Planning artifacts prepared. No Xcode project, iOS app code, Mac bridge, or mobile transport has been implemented for this milestone. A [Milestone 1 planning walkthrough](https://youtu.be/8zSFkHlXAAA) is included; it demonstrates planning work rather than a functioning iOS build. The rubric classifies checked-off app features and a build-progress video as Unit 8 bonus work; the Projects page also uses mandatory-sounding video wording. See [submission checklist](SUBMISSION_CHECKLIST.md) for that unresolved wording conflict.
 
 **Next:** validate the Mac connection architecture, then build the UIKit/Storyboard flow and real chat behavior in bounded sprints. Preserve this milestone entry when adding later progress, challenges, and demo videos.
 
+### Milestone 1 Video
+
+[Watch the Milestone 1 planning walkthrough](https://youtu.be/8zSFkHlXAAA).
+
+This recording walks through the work completed so far: brainstorming, the product specification, and wireframes. It is a planning walkthrough, not a working-app demo; iOS implementation has not started.
+
 ### Note on the Unit 8 Video Requirement
 
-I interpreted this submission as the planning milestone: brainstorming, product specification, and wireframes. The grading rubric lists the Unit 8 build-progress video as bonus work, while the Projects page also uses required-video wording in the development section. iOS implementation has not started, so no working-app demo is included. If a video is required for this planning submission, please let me know; I can provide it as soon as possible.
+The grading rubric lists the Unit 8 build-progress video as bonus work, while the Projects page also uses required-video wording. I have included a video of my completed planning work. If a working-build demonstration is additionally required for this milestone, please let me know; I can provide it as soon as possible.
 
 ## Schema
 
