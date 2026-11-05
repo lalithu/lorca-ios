@@ -16,8 +16,8 @@
 ## Publication and Submission — Must Verify Separately
 - [x] Created public individual repository: https://github.com/lalithu/lorca-ios.
 - [x] Planning documents and digital wireframe PNGs committed to the repository; hand-sketch photo to follow.
-- [ ] Open GitHub README and verify all four images and relative document links render.
-- [ ] Ensure course staff can access the repo. No public/private visibility requirement was found in the reviewed Unit 8 material; choose accessible sharing deliberately.
+- [x] Verified GitHub README rendering, all four image loads, and uploaded document targets.
+- [x] Repository is public, so graders can open it without a private collaborator invitation.
 - [ ] Complete the explicitly instructed hand-sketch step: draw the core screens and arrows on paper, photograph them, add the image, and embed it in README. Digital images are supplied but are not claimed as hand-drawn photos.
 - [ ] Open Unit 8 → Projects → Submit.
 - [ ] Enter the actual GitHub Project URL.
