@@ -13,7 +13,7 @@
 - [x] Simulator build/launch and basic interaction checks.
 
 ## Updated Build-Demo Resubmission — Student Handles
-- [ ] Add the new build-demo URL to README (student has uploaded a new video; its URL has not been provided in this chat).
+- [x] Added the [new build-demo URL](https://www.youtube.com/watch?v=PLGJzfdt1FM) to README. YouTube displays the video as Unlisted with a playable 1:57 recording.
 - [ ] Enter the repo URL and the new video URL in CodePath.
 - [ ] Enter accurate total Hours Spent. The student previously specified 4 hours; revise if additional work changes the total.
 - [ ] Use the note below and submit again.

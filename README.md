@@ -3,7 +3,7 @@
 An original UIKit / Storyboard companion to [Lorca](https://github.com/lalithu/lorca).
 
 **Unit 8 — Capstone Milestone 1 • November 4, 2026**  
-**Status:** Initial planning submission confirmed. A basic UIKit/Storyboard prototype has now been built and launched in iPhone Simulator; an updated build-demo video is pending. Mac/Ollama networking and real model responses remain unimplemented. Existing desktop Lorca is prior work.
+**Status:** Initial planning submission confirmed. A basic UIKit/Storyboard prototype has now been built and launched in iPhone Simulator; the [updated build demo](https://www.youtube.com/watch?v=PLGJzfdt1FM) is uploaded and linked below. Course resubmission is pending. Mac/Ollama networking and real model responses remain unimplemented. Existing desktop Lorca is prior work.
 
 ## Table of Contents
 1. [Overview](#overview)
@@ -132,11 +132,11 @@ Not created. Static flow diagrams are not an interactive prototype, and no proto
 
 **Next:** validate the Mac connection architecture, then build the UIKit/Storyboard flow and real chat behavior in bounded sprints. Preserve this milestone entry when adding later progress, challenges, and demo videos.
 
-### Milestone 1 Video
+### Milestone 1 Videos
 
-[Watch the Milestone 1 planning walkthrough](https://youtu.be/8zSFkHlXAAA).
+**Current app demo:** [Lorca for iOS Milestone 1 — working Storyboard prototype](https://www.youtube.com/watch?v=PLGJzfdt1FM) (1:57, Unlisted). Use this link for the updated Unit 8 submission.
 
-This recording walks through the work completed so far: brainstorming, the product specification, and wireframes. It records the initial planning stage, before iOS implementation began. The current working prototype is described below; its new build-demo link will be added separately.
+**Earlier planning walkthrough:** [Initial planning video](https://youtu.be/8zSFkHlXAAA). This records brainstorming, the product specification, and wireframes before iOS implementation began; it is retained as milestone history.
 
 ### Basic Storyboard Build — November 4, 2026
 
@@ -150,7 +150,7 @@ Source: [ios/LorcaIOS.xcodeproj](ios/LorcaIOS.xcodeproj) • [Run instructions a
 - [x] Save, restore, and clear the Mac address locally.
 - [x] Added the requested 🫍 emoji app icon and a minimal branded navigation title.
 - [ ] Actual Mac connection, pairing, and real model responses.
-- [ ] Updated video demonstrating the running build; the linked video above is the earlier planning walkthrough.
+- [x] Uploaded and linked the [updated app demo](https://www.youtube.com/watch?v=PLGJzfdt1FM) (1:57, Unlisted).
 
 **Additional code:** swipe actions implement Rename and confirmed Delete; these are not claimed as a fully verified MVP story yet.
 
@@ -158,11 +158,11 @@ Source: [ios/LorcaIOS.xcodeproj](ios/LorcaIOS.xcodeproj) • [Run instructions a
 
 **Challenge:** iOS 27 requires scene lifecycle adoption. Added a SceneDelegate and explicit Storyboard window initialization to fix launch.
 
-**Next:** film this working screen flow, update the video link and resubmit, then implement authenticated Mac networking. The student will handle the resubmission. Saved addresses are not a successful connection, drafts are not sent messages, and Send stays disabled. No mock AI output is presented as live inference.
+**Next:** resubmit with the updated app-demo link, then implement authenticated Mac networking. The student will handle the resubmission. Saved addresses are not a successful connection, drafts are not sent messages, and Send stays disabled. No mock AI output is presented as live inference.
 
 ### Video Note
 
-The initial submission included a planning walkthrough because the rubric classified Unit 8 build-video work as bonus. This follow-up adds actual app progress to address the project's request for an app demo. The original planning video is retained; the new build-demo link will be added when recorded.
+The initial submission included a planning walkthrough because the rubric classified Unit 8 build-video work as bonus. This follow-up adds actual app progress to address the project's request for an app demo. The original planning video is retained as history. The [updated app demo](https://www.youtube.com/watch?v=PLGJzfdt1FM) is uploaded and linked for resubmission; it demonstrates the basic prototype, with networking and real AI responses still unfinished.
 
 ## Schema
 
@@ -184,4 +184,4 @@ Planned: an authenticated connection to a reachable Mac service that invokes Lor
 - [Lorca transport source](https://github.com/lalithu/lorca/blob/main/src/transport.rs)
 - [Apple: local network privacy](https://developer.apple.com/documentation/technotes/tn3179-understanding-local-network-privacy)
 
-Planning text and digital wireframes were prepared with Codex assistance and should be reviewed by the student. No user testing, implementation, or working build is implied.
+Planning text and digital wireframes were prepared with Codex assistance and reviewed alongside the student. The wireframes describe intended behavior; implemented and verified prototype progress is listed separately above. No user research testing is claimed.

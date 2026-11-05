@@ -6,7 +6,7 @@ The course defines Units 8–10 as the capstone period. Tonight's verified deadl
 | Sprint | SMART goal / exit evidence | Scope |
 |---|---|---|
 | Unit 8 — Planning, due tonight | Complete six ideas, three evaluations, selected spec, four required stories, at least one optional story, screen/navigation documentation, wireframe images, and repo submission. Verify all links and image rendering before submitting. | Planning package completed and submitted; a basic Storyboard build was subsequently added for the updated demo. |
-| Unit 9 — Connection and first vertical slice, by that unit's deadline | Validate a real authenticated request from an iPhone to the Mac. Build the three UIKit/Storyboard scenes and demonstrate one prompt/reply using the real model. Save/reopen at least one chat after relaunch. Document failures and submit a real progress video. | R1, R2, initial R3. |
+| Unit 9 — Connection and first vertical slice, by that unit's deadline | Validate a real authenticated request from an iPhone to the Mac. Extend the existing three UIKit/Storyboard scenes and demonstrate one prompt/reply using the real model. Save/reopen at least one chat after relaunch. Document failures and submit a real progress video. | R1, R2, initial R3. |
 | Unit 10 — Complete and demonstrate MVP, by final capstone deadline | Pass all R1–R4 acceptance criteria, including offline history, rename/delete, error handling, and relaunch persistence. Record the final real-device/simulator demo required by the live unit instructions, update README, and prepare live presentation. | Finish R3/R4, reliability and accessible layout. |
 | Stretch — Only after MVP acceptance | Choose one optional feature after estimating remaining time. For iMessage, prove one allowlisted incoming message produces exactly one local-model reply, with no historical replay or echo loop. | O1 first if feasible; no promise all stretch work will ship. |
 
@@ -37,7 +37,7 @@ Before implementing the UI's real networking, decide:
 | Two chat stores diverge | User expects sync we have not built | Phone-local history is explicit; no cross-device sync promise. |
 | macOS iMessage database/API changes | Stretch bridge breaks | Separate adapter; validate on actual macOS version; keep out of MVP acceptance. |
 | iMessage self-replies or repeated delivery | Reply loop or duplicate sends | Allowlist sender/chat, ignore own output, persistent processed-message IDs, rate limit, start/stop control. |
-| Course expects hand sketches or interprets video broadly | Submission mismatch | Hand-sketch photo is uploaded. Initial planning walkthrough was submitted. Record the current working build for resubmission; clearly disclose unfinished networking. |
+| Course expects hand sketches or interprets video broadly | Submission mismatch | Hand-sketch photo is uploaded. Initial planning walkthrough was submitted. The updated working-build demo is uploaded and linked for resubmission; unfinished networking is clearly disclosed. |
 
 ## iMessage Stretch Architecture
 Phone Messages → Apple's iMessage service → Messages on the Mac → local bridge → Lorca core → Ollama → local bridge → Mac Messages → phone.
@@ -53,10 +53,10 @@ First stretch scope: one trusted sender, text only, one conversation, concise co
 - Small iPhone and larger iPhone layouts, keyboard visible, multiline input, Dynamic Type, VoiceOver labels.
 - No real credentials or private chat data in the repository or demo.
 
-These are planned acceptance checks, not tests already run. Unit 8 verification concerns documents, completeness, links, and wireframe readability only.
+These are planned acceptance checks, not a completed test suite. Unit 8 document checks and the basic Simulator checks listed below have been completed.
 
 ## GitHub and Reporting
 Use a dedicated `lorca-ios` repo if available. Keep the existing desktop project linked as prior work. Work on focused branches during implementation; branching is a recommended practice, not a tonight requirement. After each sprint append results, challenges, next steps, and a real demo video to README. Check only implemented/verified app features and preserve earlier milestones.
 
 ## Current Build Update — November 4
-The basic UIKit/Storyboard prototype builds and launches on iPhone 18 Pro / iOS 27. Verified New → Chat, draft persistence across restart, Settings opening, local address saving, and return home. Added the 🫍 app icon. Rename/Delete code exists but has not been exhaustively verified; no full MVP story is prematurely checked off. Live networking, pairing, and model responses remain next-sprint work. The student is recording/uploading the working-build demo and will resubmit personally. The initial confirmed submission remains intact.
+The basic UIKit/Storyboard prototype builds and launches on iPhone 18 Pro / iOS 27. Verified New → Chat, draft persistence across restart, Settings opening, local address saving, and return home. Added the 🫍 app icon. Rename/Delete code exists but has not been exhaustively verified; no full MVP story is prematurely checked off. Live networking, pairing, and model responses remain next-sprint work. The student uploaded the [working-build demo](https://www.youtube.com/watch?v=PLGJzfdt1FM) (1:57, Unlisted) and will resubmit personally. The initial confirmed submission remains intact.

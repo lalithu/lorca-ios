@@ -17,7 +17,8 @@ The original planning milestone was submitted successfully with 4 hours and a pl
 | Digital screen/control/navigation visuals | Four PNG sheets | Included as supplemental designs |
 | GitHub repo and committed deliverables | lalithu/lorca-ios | Complete |
 | Original course submission | CodePath displayed receipt confirmation | Complete |
-| Updated build-demo resubmission | Student handles; new URL not supplied here yet | Pending |
+| Updated app-demo video | [Working prototype demo](https://www.youtube.com/watch?v=PLGJzfdt1FM), 1:57, Unlisted | Uploaded and linked |
+| Updated build-demo resubmission | Student handles; use the new app-demo URL | Pending |
 
 ## Actual Build Progress
 - [x] UIKit/Storyboard app, Xcode project and 🫍 app icon.
@@ -36,7 +37,7 @@ Xcode 27 Simulator build succeeded. Final app launched on iPhone 18 Pro / iOS 27
 ## Clarifications
 - Six ideas/three evaluations satisfy the larger counts in the lab despite its smaller counts later in the body.
 - Actual student hand sketch is included; digital images are supplemental.
-- Original planning video is historical evidence. New video should demonstrate the running app.
+- Original planning video is historical evidence. The updated app-demo video is now uploaded and linked; YouTube shows it as Unlisted with a playable 1:57 recording.
 - Unit 8 rubric labels build-video work bonus; Projects also uses mandatory wording. The working app/demo addresses that concern without claiming a finished app.
 - No interactive Figma prototype/GIF is claimed; it is optional.
 - Schema/networking details belong to Unit 9.
