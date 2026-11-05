@@ -124,7 +124,7 @@ Not created. Static flow diagrams are not an interactive prototype, and no proto
 - [x] Screen archetypes and navigation flows.
 - [x] Digital low fidelity wireframe images and navigation diagram.
 - [x] Sprint goals, feasibility risks, and planned acceptance checks: [SPRINT_PLAN.md](SPRINT_PLAN.md).
-- [x] Public capstone repository: [lalithu/lorca-ios](https://github.com/lalithu/lorca-ios). Planning documents and digital wireframes committed; hand-sketch photo pending.
+- [x] Public capstone repository: [lalithu/lorca-ios](https://github.com/lalithu/lorca-ios). Planning documents, digital wireframes, and hand-sketch photo committed.
 - [x] Photographed hand-sketched core screens and navigation uploaded and embedded.
 - [ ] Course submission through Unit 8 Projects.
 
