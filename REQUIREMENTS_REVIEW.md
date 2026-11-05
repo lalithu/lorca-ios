@@ -1,6 +1,6 @@
-# Unit 8 Requirements Review — Before Publication
+# Unit 8 Requirements Review — Published Planning Package
 
-Reviewed November 4, 2026. This audits the local planning package against the course material read in this chat. **No publication, course submission, or implementation is claimed.**
+Reviewed November 4, 2026. This audits the local planning package against the course material read in this chat. **Planning documents are published. Hand-sketch photo and course submission remain pending; implementation has not started.**
 
 ## A. Required Planning Content
 
@@ -22,13 +22,13 @@ Reviewed November 4, 2026. This audits the local planning package against the co
 | Label core screens | Wireframe sheet 01 labels Conversations, Chat, Connection Settings; sheet 04 labels modals | Covered |
 | Show screen relationships with arrows | Sheet 03 has opening/back arrows and settings/modal routes; dismissal behavior annotated | Covered |
 | Show key data, views and controls | Sheet 01 has rows, transcript, composer, buttons, host/credential fields; sheet 04 adds edit/confirm controls | Covered |
-| Add wireframe image files | Four PNG files under wireframes/ | Covered locally; not uploaded |
-| Display/link wireframes in README | README embeds all four PNGs using relative paths | Covered locally; GitHub rendering remains unverified |
+| Add wireframe image files | Four PNG files under wireframes/ | Uploaded and verified |
+| Display/link wireframes in README | README embeds all four PNGs using relative paths | Verified on GitHub; all four digital images load |
 | Hand-sketch wireframes and photograph them | Digital images provided, explicitly labeled as digital; no actual paper photo exists | Outstanding — explicitly instructed; digital substitution not authorized |
 | Put brainstorming in brainstorming.md | File supplied at repository root of package | Covered locally |
 | Use official capstone README structure | Overview, Product Spec, Wireframes, bonus sections, Schema/Models/Networking headings retained | Covered |
-| Create individual GitHub repo | Proposed lorca-ios; user asked to keep local | Not done — awaiting later authorization |
-| Upload/commit planning files and images | ZIP and unpacked files exist locally | Not done — awaiting publication |
+| Create individual GitHub repo | Public lalithu/lorca-ios | Complete |
+| Upload/commit planning files and images | Planning files committed to main | Complete; hand-sketch photo pending |
 | Submit GitHub URL through Unit 8 Projects | No submission performed | Not done |
 | Keep prior milestone information | Initial milestone entry exists; instructions say to append future progress | Prepared for future updates |
 | Replace template placeholders | App-specific content throughout; Unit 9 sections intentionally state future scope rather than fake schemas | Covered |
@@ -37,8 +37,8 @@ Reviewed November 4, 2026. This audits the local planning package against the co
 
 | Rubric item | Points | Current evidence / limit |
 |---|---:|---|
-| Creation of Project Repo | 1 | Still requires GitHub repo creation; local package does not establish this point |
-| App Overview: Description and evaluation | 3 | Complete in README, ready for publication |
+| Creation of Project Repo | 1 | Public individual repository created and verified |
+| App Overview: Description and evaluation | 3 | Published in README |
 | App Spec: User features, screens and navigation flows | 3 | Complete in README, supported by diagrams |
 | Wireframe images | 3 | Four digital image sheets complete; actual hand-sketch photo is missing; the template explicitly asks for it |
 
@@ -95,7 +95,7 @@ This is evidence coverage, not a prediction or guarantee of the instructor's gra
 ## G. Live Recheck — November 4, 2026
 Reopened the Lab, Projects, student rubric, and official template. The hand-sketch instruction is explicit in both the lab and template; no digital-substitution exception was found. This replaces earlier tentative language suggesting the digital sheets might fully satisfy the required hand-sketch workflow.
 
-**Outstanding required actions:** actual hand sketches + photo + README embedding; GitHub repository creation; commit/upload all deliverables; verify access and GitHub rendering; submit actual repository URL and verify confirmation before the displayed deadline.
+**Outstanding required actions:** actual hand sketches + photo + README embedding; submit actual repository URL and verify confirmation before the displayed deadline.
 
 **Unresolved:** Projects says to upload an app-progress video while the rubric calls it bonus. No build/video exists. Resolve with instructor/TF or choose genuine build work later; do not call the current no-code package fully compliant with every sentence of Projects.
 
@@ -104,4 +104,6 @@ Reopened the Lab, Projects, student rubric, and official template. The hand-sket
 **Not mandatory:** Figma workflow/tutorials, high fidelity mockups, interactive prototype/GIF, peer reviews, per-sprint branches (recommended), and two mobile-native capabilities (suggested by “try for” wording). Schema is designated for Unit 9. These omissions are not extra required Unit 8 deliverables.
 
 ## H. Publication Update
-The user subsequently authorized a public repository. The planning package is being published at https://github.com/lalithu/lorca-ios. Earlier pre-publication statuses above are retained as review history and superseded by this update. Hand-sketch photo, course submission, and video clarification remain outstanding. See SUBMISSION_CHECKLIST.md for the latest action status.
+The user subsequently authorized a public repository. The planning package is published at https://github.com/lalithu/lorca-ios. Earlier pre-publication statuses above are retained as review history and superseded by this update. Hand-sketch photo, course submission, and video clarification remain outstanding. See SUBMISSION_CHECKLIST.md for the latest action status.
+
+GitHub verification completed: 11 planning files matched their uploaded blob hashes, the public repository and rendered README were inspected, and all four README images loaded with nonzero dimensions. Hand-sketch photo and course submission are still pending.
