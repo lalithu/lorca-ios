@@ -19,12 +19,12 @@
 - [x] Verified GitHub README rendering, all four image loads, and uploaded document targets.
 - [x] Repository is public, so graders can open it without a private collaborator invitation.
 - [x] Student hand-sketch photo includes the three core screens and navigation arrows; uploaded and embedded in README. Digital sheets provide detailed controls and dialogs.
-- [ ] Open Unit 8 → Projects → Submit.
-- [ ] Enter the actual GitHub Project URL.
-- [ ] Enter actual Hours Spent (not an estimate invented by the assistant).
-- [ ] If pursuing bonus build work, provide its genuine Video URL and add the same demo to README. No implementation video exists in this package.
-- [ ] Add concise notes if useful; do not claim app implementation.
-- [ ] Submit before deadline and verify the confirmation/report. The inspected form says resubmission is allowed.
+- [x] Opened Unit 8 → Projects → Submit.
+- [x] Entered the actual GitHub Project URL.
+- [x] Entered 4 Hours Spent, as supplied by the student.
+- [x] Added the student's planning walkthrough video to README and the submission form: https://youtu.be/8zSFkHlXAAA. It is not represented as a working-build demo.
+- [x] Added submission notes describing completed planning and the video/build wording ambiguity.
+- [x] Submitted November 4, 2026 with 4 hours and the planning video. CodePath displayed: “Thanks! We have received your submission.” The peer report is not available yet.
 
 ## Grading and Wording Conflicts
 The student rubric allocates 10 required points: repository 1, overview/evaluation 3, spec/screens/navigation 3, wireframes 3. Brainstorming is explicitly required by the lab even though it has no separate row.
@@ -38,7 +38,7 @@ Digital wireframes and interactive prototypes are labeled bonus in the lab. The 
 No PDF, polished mockup, interactive prototype, App Store release, TestFlight release, or finished app is listed as a required Unit 8 planning deliverable. Models/schema/networking are reserved for Unit 9 by the official template.
 
 ## Optional Suggested Submission Note
-“Milestone 1 planning for Lorca for iOS, a new UIKit/Storyboard companion to my existing Lorca Mac backend. Includes brainstorming, app evaluation, user stories, screen/navigation specification, and low fidelity wireframes. iMessage is a stretch feature. iOS implementation has not started.”
+“Milestone 1 planning for Lorca for iOS, a new UIKit/Storyboard companion to my existing Lorca Mac backend. Includes brainstorming, app evaluation, user stories, screen/navigation specification, and low fidelity wireframes. iMessage is a stretch feature. The submitted video walks through planning work; iOS implementation has not started.”
 
 Review this note before use; update it if any work or publication status changes.
 
