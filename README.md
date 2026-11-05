@@ -3,7 +3,7 @@
 An original UIKit / Storyboard companion to [Lorca](https://github.com/lalithu/lorca).
 
 **Unit 8 — Capstone Milestone 1 • November 4, 2026**  
-**Status:** Digital planning package prepared; hand-sketch photo and course submission remain outstanding; iOS implementation has not started. All application features below are unchecked intentionally. The existing Mac application is prior work and is not claimed as new capstone implementation.
+**Status:** Digital planning package prepared; course submission remains outstanding; iOS implementation has not started. All application features below are unchecked intentionally. The existing Mac application is prior work and is not claimed as new capstone implementation.
 
 ## Table of Contents
 1. [Overview](#overview)
@@ -93,10 +93,13 @@ There is no tab bar in the MVP. A navigation controller supports the small hiera
 
 ## Wireframes
 
-### Hand-sketched Wireframes — Outstanding
-The Unit 8 lab explicitly requires hand sketching and photographing the wireframes; the official template asks for the hand-sketch picture here. **An actual hand-sketch photo has not been supplied.** Digital images below do not establish completion of that specific instruction. Add the photo and embed it here before treating this requirement as complete, unless the instructor explicitly accepts a digital substitute.
+### Hand-sketched Wireframes
 
-Use the [screen-by-screen paper drawing guide](HAND_SKETCH_GUIDE.md). See the [requirement-by-requirement review](REQUIREMENTS_REVIEW.md) and [wireframe annotations](wireframes/README.md).
+![Hand-sketched core screens and navigation](wireframes/hand-sketch-main.jpg)
+
+Student-drawn low fidelity wireframes show Conversations, Chat, Connection Settings, and navigation arrows. The digital sheets below supplement this overview with readable control labels, Rename/Delete dialogs, and loading/offline/error states.
+
+See the [requirement-by-requirement review](REQUIREMENTS_REVIEW.md) and [wireframe annotations](wireframes/README.md).
 
 ### [BONUS] Digital Wireframes & Mockups
 These are digital low fidelity planning drawings, not app screenshots or photographs of hand sketches. They show all planned MVP screens, controls, states, and navigation. Bonus credit is subject to instructor evaluation; no Figma source or interactive prototype is claimed.
@@ -122,7 +125,7 @@ Not created. Static flow diagrams are not an interactive prototype, and no proto
 - [x] Digital low fidelity wireframe images and navigation diagram.
 - [x] Sprint goals, feasibility risks, and planned acceptance checks: [SPRINT_PLAN.md](SPRINT_PLAN.md).
 - [x] Public capstone repository: [lalithu/lorca-ios](https://github.com/lalithu/lorca-ios). Planning documents and digital wireframes committed; hand-sketch photo pending.
-- [ ] Photographed hand-sketched counterpart uploaded to match the lab's specified creation method.
+- [x] Photographed hand-sketched core screens and navigation uploaded and embedded.
 - [ ] Course submission through Unit 8 Projects.
 
 **Progress:** Planning artifacts prepared. No Xcode project, iOS app code, Mac bridge, or mobile transport has been implemented for this milestone. No build video exists. The rubric classifies checked-off app features and a build-progress video as Unit 8 bonus work; the Projects page also uses mandatory-sounding video wording. See [submission checklist](SUBMISSION_CHECKLIST.md) for that unresolved wording conflict.
