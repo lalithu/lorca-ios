@@ -1,6 +1,6 @@
 # Low Fidelity Wireframe Annotations
 
-These are digital planning drawings. They are not an app build, hand-drawn photographs, or an interactive prototype. Text and messages are fictional examples.
+The numbered PNGs are digital planning drawings; hand-sketch-main.jpg is the student’s actual paper sketch. None is an app build or interactive prototype. Sample messages are fictional.
 
 ## 01 — Core Screens
 - **Conversations:** New opens an empty Chat. Settings opens Connection Settings. A row opens its saved Chat. Row actions expose Rename/Delete with a confirmation before deletion.
@@ -25,5 +25,5 @@ Use Auto Layout with safe areas and a keyboard-aware composer. Support Dynamic T
 - **Connection failure:** keeps address and masked credential visible for correction; Test & Save retries; Done dismisses without claiming a connection. While testing, show Connecting.
 - Distinguish unreachable Mac, invalid credential, denied local-network permission, incompatible service, and busy Mac with specific guidance.
 
-## Paper Sketch — Outstanding Lab Method Requirement
-For the lab's explicitly described hand-sketch workflow, copy the three core screen layouts and navigation arrows onto paper, photograph the page, save it here (for example `hand-sketch.jpg`), and embed that actual photo in README. Do not relabel these generated digital drawings as a hand sketch.
+## Paper Sketch — Included
+`hand-sketch-main.jpg` is the student's photographed paper wireframe for Conversations, Chat, Connection Settings, and navigation arrows. The numbered digital sheets supplement it with detailed controls, dialogs, and states. The original photograph is preserved without redrawing or generated modifications.
