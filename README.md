@@ -154,7 +154,7 @@ Source: [ios/LorcaIOS.xcodeproj](ios/LorcaIOS.xcodeproj) • [Run instructions a
 
 **Additional code:** swipe actions implement Rename and confirmed Delete; these are not claimed as a fully verified MVP story yet.
 
-**Validation:** Simulator build succeeded with Xcode 27. The app launched on iPhone 18 Pro / iOS 27, and New opened the Chat scene. The final emoji-icon build is being checked before filming. Detailed persistence and all edge cases have not been exhaustively tested.
+**Validation:** Simulator build succeeded with Xcode 27. The app launched on iPhone 18 Pro / iOS 27, and New opened the Chat scene. The final emoji-icon build succeeded and launched. Verified New → Chat, draft persistence across app restart, Settings opening, local address saving, and Done returning home. Rename/Delete and all edge cases have not been exhaustively tested.
 
 **Challenge:** iOS 27 requires scene lifecycle adoption. Added a SceneDelegate and explicit Storyboard window initialization to fix launch.
 
