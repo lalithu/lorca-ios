@@ -1,6 +1,6 @@
 # Unit 8 Requirements Review — Published Planning Package
 
-Reviewed November 4, 2026. This audits the local planning package against the course material read in this chat. **Planning documents are published. Hand-sketch photo and course submission remain pending; implementation has not started.**
+Reviewed November 4, 2026. This audits the local planning package against the course material read in this chat. **Planning documents are published. Course submission remains pending; implementation has not started.**
 
 ## A. Required Planning Content
 
@@ -24,11 +24,11 @@ Reviewed November 4, 2026. This audits the local planning package against the co
 | Show key data, views and controls | Sheet 01 has rows, transcript, composer, buttons, host/credential fields; sheet 04 adds edit/confirm controls | Covered |
 | Add wireframe image files | Four PNG files under wireframes/ | Uploaded and verified |
 | Display/link wireframes in README | README embeds all four PNGs using relative paths | Verified on GitHub; all four digital images load |
-| Hand-sketch wireframes and photograph them | Digital images provided, explicitly labeled as digital; no actual paper photo exists | Outstanding — explicitly instructed; digital substitution not authorized |
+| Hand-sketch wireframes and photograph them | Actual student photo plus digital supplements | Included; photo shows core screens and navigation |
 | Put brainstorming in brainstorming.md | File supplied at repository root of package | Covered locally |
 | Use official capstone README structure | Overview, Product Spec, Wireframes, bonus sections, Schema/Models/Networking headings retained | Covered |
 | Create individual GitHub repo | Public lalithu/lorca-ios | Complete |
-| Upload/commit planning files and images | Planning files committed to main | Complete; hand-sketch photo pending |
+| Upload/commit planning files and images | Planning files committed to main | Complete; hand-sketch photo included |
 | Submit GitHub URL through Unit 8 Projects | No submission performed | Not done |
 | Keep prior milestone information | Initial milestone entry exists; instructions say to append future progress | Prepared for future updates |
 | Replace template placeholders | App-specific content throughout; Unit 9 sections intentionally state future scope rather than fake schemas | Covered |
@@ -40,7 +40,7 @@ Reviewed November 4, 2026. This audits the local planning package against the co
 | Creation of Project Repo | 1 | Public individual repository created and verified |
 | App Overview: Description and evaluation | 3 | Published in README |
 | App Spec: User features, screens and navigation flows | 3 | Complete in README, supported by diagrams |
-| Wireframe images | 3 | Four digital image sheets complete; actual hand-sketch photo is missing; the template explicitly asks for it |
+| Wireframe images | 3 | Four digital image sheets complete; actual hand-sketch photo included alongside digital supplements |
 
 This is evidence coverage, not a prediction or guarantee of the instructor's grade. Brainstorming remains required by the lab despite lacking its own rubric row.
 
@@ -107,3 +107,6 @@ Reopened the Lab, Projects, student rubric, and official template. The hand-sket
 The user subsequently authorized a public repository. The planning package is published at https://github.com/lalithu/lorca-ios. Earlier pre-publication statuses above are retained as review history and superseded by this update. Hand-sketch photo, course submission, and video clarification remain outstanding. See SUBMISSION_CHECKLIST.md for the latest action status.
 
 GitHub verification completed: 11 planning files matched their uploaded blob hashes, the public repository and rendered README were inspected, and all four README images loaded with nonzero dimensions. Hand-sketch photo and course submission are still pending.
+
+## I. Hand Sketch Received
+Student supplied hand-sketch-main.jpg with three core screens and navigation arrows and accepted it as the final paper sketch. It is embedded in README, with digital sheets covering detailed labels, dialogs and states. Earlier missing-photo notes are superseded. No additional hand drawings are being requested. Course submission and video clarification remain outstanding; no implementation has started.
