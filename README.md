@@ -3,7 +3,7 @@
 An original UIKit / Storyboard companion to [Lorca](https://github.com/lalithu/lorca).
 
 **Unit 8 — Capstone Milestone 1 • November 4, 2026**  
-**Status:** Digital planning package prepared; course submission confirmed; iOS implementation has not started. All application features below are unchecked intentionally. The existing Mac application is prior work and is not claimed as new capstone implementation.
+**Status:** Initial planning submission confirmed. A basic UIKit/Storyboard prototype has now been built and launched in iPhone Simulator; an updated build-demo video is pending. Mac/Ollama networking and real model responses remain unimplemented. Existing desktop Lorca is prior work.
 
 ## Table of Contents
 1. [Overview](#overview)
@@ -45,7 +45,7 @@ An optional later iMessage bridge would let the user text a Lorca identity throu
 - [ ] **O3 — Image input:** The user can attach a photo for a compatible vision model, with explicit model and permission handling.
 - [ ] **O4 — Discovery:** The user can discover a Mac automatically instead of typing its address.
 
-No feature is marked implemented. Digital wireframes demonstrate the intended interface only.
+The R1–R4 checkboxes track the complete MVP requirements. The basic build below implements only a subset, so incomplete MVP stories remain unchecked. Digital wireframes describe the full intended interface.
 
 ### 2. Screen Archetypes
 
@@ -138,9 +138,31 @@ Not created. Static flow diagrams are not an interactive prototype, and no proto
 
 This recording walks through the work completed so far: brainstorming, the product specification, and wireframes. It is a planning walkthrough, not a working-app demo; iOS implementation has not started.
 
-### Note on the Unit 8 Video Requirement
+### Basic Storyboard Build — November 4, 2026
 
-The grading rubric lists the Unit 8 build-progress video as bonus work, while the Projects page also uses required-video wording. I have included a video of my completed planning work. If a working-build demonstration is additionally required for this milestone, please let me know; I can provide it as soon as possible.
+Source: [ios/LorcaIOS.xcodeproj](ios/LorcaIOS.xcodeproj) • [Run instructions and demo flow](ios/README.md)
+
+**Completed build progress:**
+- [x] Three UIKit/Storyboard screens: Conversations, Chat, Connection Settings.
+- [x] Navigation from New/open conversation to Chat; modal Settings and return.
+- [x] Create conversations stored locally on the phone.
+- [x] Save and restore a message draft locally.
+- [x] Save, restore, and clear the Mac address locally.
+- [x] Added the requested 🫍 emoji app icon and a minimal branded navigation title.
+- [ ] Actual Mac connection, pairing, and real model responses.
+- [ ] Updated video demonstrating the running build; the linked video above is the earlier planning walkthrough.
+
+**Additional code:** swipe actions implement Rename and confirmed Delete; these are not claimed as a fully verified MVP story yet.
+
+**Validation:** Simulator build succeeded with Xcode 27. The app launched on iPhone 18 Pro / iOS 27, and New opened the Chat scene. The final emoji-icon build is being checked before filming. Detailed persistence and all edge cases have not been exhaustively tested.
+
+**Challenge:** iOS 27 requires scene lifecycle adoption. Added a SceneDelegate and explicit Storyboard window initialization to fix launch.
+
+**Next:** film this working screen flow, update the video link and resubmit, then implement authenticated Mac networking. Saved addresses are not a successful connection, drafts are not sent messages, and Send stays disabled. No mock AI output is presented as live inference.
+
+### Video Note
+
+The initial submission included a planning walkthrough because the rubric classified Unit 8 build-video work as bonus. This follow-up adds actual app progress to address the project's request for an app demo. The original planning video is retained; the new build-demo link will be added when recorded.
 
 ## Schema
 
