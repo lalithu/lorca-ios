@@ -57,5 +57,5 @@ We choose this over Capture because direct conversation is the central need. We 
 - One user, one Mac, same trusted local network for the native app MVP.
 - Mac awake, Lorca and Ollama available, installed model capable of text chat.
 - No mobile on-device model, cloud inference, public Ollama exposure, or automatic desktop history sync promised.
-- No app implementation exists for this milestone. Prior desktop work is attributed separately.
+- At the initial brainstorming stage, no iOS implementation existed. A basic Storyboard prototype has since been added under `ios/`; see README for current progress. Prior desktop work is attributed separately.
 - Course eligibility for an original iOS companion built around existing personal backend work is not explicitly addressed in the published instructions; disclose the boundary and confirm with the instructor if needed.

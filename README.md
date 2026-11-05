@@ -128,7 +128,7 @@ Not created. Static flow diagrams are not an interactive prototype, and no proto
 - [x] Photographed hand-sketched core screens and navigation uploaded and embedded.
 - [x] Submitted through Unit 8 Projects on November 4, 2026 with the planning walkthrough video, 4 hours, and clarification note. CodePath confirmed receipt.
 
-**Progress:** Planning artifacts prepared. No Xcode project, iOS app code, Mac bridge, or mobile transport has been implemented for this milestone. A [Milestone 1 planning walkthrough](https://youtu.be/8zSFkHlXAAA) is included; it demonstrates planning work rather than a functioning iOS build. The rubric classifies checked-off app features and a build-progress video as Unit 8 bonus work; the Projects page also uses mandatory-sounding video wording. See [submission checklist](SUBMISSION_CHECKLIST.md) for that unresolved wording conflict.
+**Initial submission:** The planning artifacts were submitted before implementation began. The basic Storyboard build described below was added afterward. Mac integration remains unimplemented. A [Milestone 1 planning walkthrough](https://youtu.be/8zSFkHlXAAA) is included; it demonstrates planning work rather than a functioning iOS build. The rubric classifies checked-off app features and a build-progress video as Unit 8 bonus work; the Projects page also uses mandatory-sounding video wording. See [submission checklist](SUBMISSION_CHECKLIST.md) for that unresolved wording conflict.
 
 **Next:** validate the Mac connection architecture, then build the UIKit/Storyboard flow and real chat behavior in bounded sprints. Preserve this milestone entry when adding later progress, challenges, and demo videos.
 
@@ -136,7 +136,7 @@ Not created. Static flow diagrams are not an interactive prototype, and no proto
 
 [Watch the Milestone 1 planning walkthrough](https://youtu.be/8zSFkHlXAAA).
 
-This recording walks through the work completed so far: brainstorming, the product specification, and wireframes. It is a planning walkthrough, not a working-app demo; iOS implementation has not started.
+This recording walks through the work completed so far: brainstorming, the product specification, and wireframes. It records the initial planning stage, before iOS implementation began. The current working prototype is described below; its new build-demo link will be added separately.
 
 ### Basic Storyboard Build — November 4, 2026
 
@@ -158,7 +158,7 @@ Source: [ios/LorcaIOS.xcodeproj](ios/LorcaIOS.xcodeproj) • [Run instructions a
 
 **Challenge:** iOS 27 requires scene lifecycle adoption. Added a SceneDelegate and explicit Storyboard window initialization to fix launch.
 
-**Next:** film this working screen flow, update the video link and resubmit, then implement authenticated Mac networking. Saved addresses are not a successful connection, drafts are not sent messages, and Send stays disabled. No mock AI output is presented as live inference.
+**Next:** film this working screen flow, update the video link and resubmit, then implement authenticated Mac networking. The student will handle the resubmission. Saved addresses are not a successful connection, drafts are not sent messages, and Send stays disabled. No mock AI output is presented as live inference.
 
 ### Video Note
 

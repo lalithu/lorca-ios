@@ -1,3 +1,5 @@
+> **Status:** The student’s completed hand-sketch photo is already included in README. This is the original reference guide, not an outstanding drawing assignment.
+
 # Hand Sketch Copy Guide — Lorca for iOS
 
 Use one landscape sheet for A–C and their navigation arrows. Use a second sheet for D–E and the small state notes. Pen or pencil is fine. These are low fidelity sketches; no color, ruler, branding, or realistic phone frame is needed. Label the page “Lorca for iOS — Unit 8 Wireframes” and date it.

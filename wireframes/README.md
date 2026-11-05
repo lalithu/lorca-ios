@@ -1,3 +1,5 @@
+> These wireframes specify the intended MVP. The current basic build is documented in `../ios/README.md`; planned controls such as Test & Save, pairing, and live Send are not all implemented. The prototype currently saves a Mac address locally.
+
 # Low Fidelity Wireframe Annotations
 
 The numbered PNGs are digital planning drawings; hand-sketch-main.jpg is the student’s actual paper sketch. None is an app build or interactive prototype. Sample messages are fictional.
