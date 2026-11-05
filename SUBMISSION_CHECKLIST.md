@@ -15,10 +15,10 @@
 
 ## Publication and Submission — Must Verify Separately
 - [x] Created public individual repository: https://github.com/lalithu/lorca-ios.
-- [x] Planning documents and digital wireframe PNGs committed to the repository; hand-sketch photo to follow.
+- [x] Planning documents and digital wireframe PNGs committed to the repository; hand-sketch photo included.
 - [x] Verified GitHub README rendering, all four image loads, and uploaded document targets.
 - [x] Repository is public, so graders can open it without a private collaborator invitation.
-- [ ] Complete the explicitly instructed hand-sketch step: draw the core screens and arrows on paper, photograph them, add the image, and embed it in README. Digital images are supplied but are not claimed as hand-drawn photos.
+- [x] Student hand-sketch photo includes the three core screens and navigation arrows; uploaded and embedded in README. Digital sheets provide detailed controls and dialogs.
 - [ ] Open Unit 8 → Projects → Submit.
 - [ ] Enter the actual GitHub Project URL.
 - [ ] Enter actual Hours Spent (not an estimate invented by the assistant).
@@ -33,7 +33,7 @@ The same rubric separately assigns 10 Unit 8 bonus points: completed user featur
 
 The lab's summary says six ideas/top three evaluations, while later body steps say three ideas/top two. This package satisfies the larger counts.
 
-Digital wireframes and interactive prototypes are labeled bonus in the lab. The supplied digital images depict the required screens and flows, but the lab and template explicitly call for hand sketches and a photograph. No exception accepting digital substitution was found. Add the photo unless the instructor explicitly approves a substitute.
+Digital wireframes and interactive prototypes are labeled bonus in the lab. The supplied digital images depict the required screens and flows, but the lab and template explicitly call for hand sketches and a photograph. No exception accepting digital substitution was found. The actual student photo is now included alongside the digital sheets.
 
 No PDF, polished mockup, interactive prototype, App Store release, TestFlight release, or finished app is listed as a required Unit 8 planning deliverable. Models/schema/networking are reserved for Unit 9 by the official template.
 
