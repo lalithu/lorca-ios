@@ -7,10 +7,28 @@ final class NotesViewController:UIViewController,UITableViewDataSource,UITableVi
     @IBOutlet private weak var emptyLabel:UILabel!
     private let search=UISearchController(searchResultsController:nil)
     private var visible:[Note]=[]
+    private var openedCanvas=false
     override func viewDidLoad() {
         super.viewDidLoad();title="Notes"
         navigationController?.navigationBar.prefersLargeTitles=true
-        tableView.dataSource=self;tableView.delegate=self;tableView.rowHeight=84
+        let appearance=UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .white
+        let heading=UIFont.systemFont(ofSize:38,weight:.bold)
+        appearance.largeTitleTextAttributes=[.font:UIFont(descriptor:heading.fontDescriptor.withDesign(.serif) ?? heading.fontDescriptor,size:38)]
+        appearance.shadowColor = .clear
+        navigationController?.navigationBar.directionalLayoutMargins=NSDirectionalEdgeInsets(top:0,leading:22,bottom:0,trailing:22)
+        navigationController?.navigationBar.standardAppearance=appearance
+        navigationController?.navigationBar.scrollEdgeAppearance=appearance
+        navigationItem.leftBarButtonItem?.title=nil
+        navigationItem.leftBarButtonItem?.image=UIImage(systemName:"gearshape")
+        navigationItem.leftBarButtonItem?.accessibilityLabel="Settings"
+        tableView.dataSource=self;tableView.delegate=self
+        tableView.rowHeight=UITableView.automaticDimension;tableView.estimatedRowHeight=84
+        tableView.directionalLayoutMargins=NSDirectionalEdgeInsets(top:0,leading:20,bottom:0,trailing:20)
+        tableView.cellLayoutMarginsFollowReadableWidth=true
+        emptyLabel.textColor = .secondaryLabel
+        emptyLabel.font = .preferredFont(forTextStyle:.body);emptyLabel.adjustsFontForContentSizeCategory=true
         tableView.register(UITableViewCell.self,forCellReuseIdentifier:"Note")
         tableView.accessibilityIdentifier="notesList"
         search.searchResultsUpdater=self;search.obscuresBackgroundDuringPresentation=false;search.searchBar.placeholder="Search notes"
@@ -19,6 +37,14 @@ final class NotesViewController:UIViewController,UITableViewDataSource,UITableVi
         reload()
     }
     override func viewWillAppear(_ animated:Bool) { super.viewWillAppear(animated);reload() }
+    override func viewDidAppear(_ animated:Bool) {
+        super.viewDidAppear(animated)
+        guard !openedCanvas else { return };openedCanvas=true
+        guard NotesStore.shared.error == nil else { return }
+        let saved=UserDefaults.standard.string(forKey:"lorca.ios.openNote").flatMap(UUID.init(uuidString:))
+        let note=saved.flatMap{NotesStore.shared.note($0)} ?? NotesStore.shared.notes.first ?? NotesStore.shared.create()
+        show(note.id,animated:false)
+    }
     deinit { NotificationCenter.default.removeObserver(self) }
     @objc private func reload() {
         let query=search.searchBar.text ?? ""
@@ -27,11 +53,11 @@ final class NotesViewController:UIViewController,UITableViewDataSource,UITableVi
         emptyLabel.text=NotesStore.shared.error ?? (query.isEmpty ? "Your thoughts, with room to grow.\nTap + to write your first note." : "No matching notes.")
     }
     func updateSearchResults(for searchController:UISearchController) { reload() }
-    @IBAction private func newNote(_ sender:Any) { show(NotesStore.shared.create().id) }
+    @IBAction private func newNote(_ sender:Any) { show(NotesStore.shared.create().id,focus:true) }
     @IBAction private func settings(_ sender:Any) { presentSettings(from:self) }
-    private func show(_ id:UUID) {
+    private func show(_ id:UUID,animated:Bool=true,focus:Bool=true) {
         let vc=storyboard!.instantiateViewController(withIdentifier:"NoteEditor") as! NoteEditorViewController
-        vc.noteID=id;navigationController?.pushViewController(vc,animated:true)
+        vc.noteID=id;vc.focusOnOpen=focus;navigationController?.pushViewController(vc,animated:animated)
     }
     func tableView(_ tableView:UITableView,numberOfRowsInSection section:Int)->Int { visible.count }
     func tableView(_ tableView:UITableView,cellForRowAt indexPath:IndexPath)->UITableViewCell {
@@ -40,6 +66,9 @@ final class NotesViewController:UIViewController,UITableViewDataSource,UITableVi
         let preview=note.text.split(whereSeparator:\.isNewline).dropFirst().prefix(2).joined(separator:" ")
         content.secondaryText=DateFormatter.localizedString(from:note.updatedAt,dateStyle:.short,timeStyle:.short)+(preview.isEmpty ? " · Empty note" : " · "+preview)
         content.secondaryTextProperties.numberOfLines=2;content.secondaryTextProperties.color = .secondaryLabel
+        content.textProperties.numberOfLines=2
+        content.directionalLayoutMargins=NSDirectionalEdgeInsets(top:16,leading:0,bottom:16,trailing:0)
+        cell.preservesSuperviewLayoutMargins=true
         cell.contentConfiguration=content;cell.accessoryType = .disclosureIndicator;return cell
     }
     func tableView(_ tableView:UITableView,didSelectRowAt indexPath:IndexPath) { tableView.deselectRow(at:indexPath,animated:true);show(visible[indexPath.row].id) }
@@ -74,35 +103,93 @@ final class NotesViewController:UIViewController,UITableViewDataSource,UITableVi
 
 final class NoteEditorViewController:UIViewController,PHPickerViewControllerDelegate {
     var noteID:UUID!
+    var focusOnOpen=false
+    private let wordCount=UILabel()
     @IBOutlet private weak var editorContainer:UIView!
     @IBOutlet private weak var statusButton:UIButton!
     @IBOutlet private weak var activity:UIActivityIndicatorView!
     private var document:NoteDocument!
     override func viewDidLoad() {
-        super.viewDidLoad();document=NoteDocuments.get(noteID);title=NotesStore.shared.note(noteID)?.title ?? "Note"
-        navigationItem.largeTitleDisplayMode = .never
+        super.viewDidLoad();document=NoteDocuments.get(noteID);title="Notes"
+        UserDefaults.standard.set(noteID.uuidString,forKey:"lorca.ios.openNote")
+        navigationItem.largeTitleDisplayMode = .always
+        var statusStyle=UIButton.Configuration.plain()
+        statusStyle.image=UIImage(systemName:"sparkles");statusStyle.imagePadding=7
+        statusStyle.preferredSymbolConfigurationForImage=UIImage.SymbolConfiguration(pointSize:15,weight:.regular,scale:.small)
+        statusStyle.contentInsets=NSDirectionalEdgeInsets(top:8,leading:0,bottom:8,trailing:0)
+        statusStyle.titleTextAttributesTransformer=UIConfigurationTextAttributesTransformer { incoming in
+            var attributes=incoming;attributes.font=UIFont.preferredFont(forTextStyle:.footnote);return attributes
+        }
+        statusButton.configuration=statusStyle;statusButton.contentHorizontalAlignment = .leading
+        statusButton.heightAnchor.constraint(greaterThanOrEqualToConstant:44).isActive=true
+        view.constraints.first{$0.identifier=="constraint-12"}?.constant=22
+        wordCount.font = .preferredFont(forTextStyle:.caption1);wordCount.textColor = .secondaryLabel
+        wordCount.adjustsFontForContentSizeCategory=true
+        wordCount.translatesAutoresizingMaskIntoConstraints=false;view.addSubview(wordCount)
+        wordCount.setContentCompressionResistancePriority(.required,for:.horizontal)
+        NSLayoutConstraint.activate([wordCount.trailingAnchor.constraint(equalTo:view.safeAreaLayoutGuide.trailingAnchor,constant:-20),wordCount.centerYAnchor.constraint(equalTo:statusButton.centerYAnchor)])
+        view.constraints.first{$0.identifier=="constraint-13"}?.constant=105
+        NotificationCenter.default.addObserver(self,selector:#selector(updateWordCount),name:.notesChanged,object:nil)
         let editor=document.editor;editor.removeFromSuperview();editor.translatesAutoresizingMaskIntoConstraints=false;editorContainer.addSubview(editor)
         NSLayoutConstraint.activate([editor.leadingAnchor.constraint(equalTo:editorContainer.leadingAnchor),editor.trailingAnchor.constraint(equalTo:editorContainer.trailingAnchor),editor.topAnchor.constraint(equalTo:editorContainer.topAnchor),editor.bottomAnchor.constraint(equalTo:editorContainer.bottomAnchor)])
         // Keep the storyboard's editor/status region above the software keyboard.
         view.constraints.filter{$0.identifier=="editor-bottom"}.forEach{$0.isActive=false}
         statusButton.bottomAnchor.constraint(equalTo:view.keyboardLayoutGuide.topAnchor,constant:-8).isActive=true
         let toolbar=UIToolbar();toolbar.sizeToFit()
-        let undo=UIBarButtonItem(image:UIImage(systemName:"arrow.uturn.backward"),style:.plain,target:self,action:#selector(undo))
-        let redo=UIBarButtonItem(image:UIImage(systemName:"arrow.uturn.forward"),style:.plain,target:self,action:#selector(redo))
-        toolbar.items=[undo,redo,.flexibleSpace(),UIBarButtonItem(title:"Done",style:.done,target:self,action:#selector(done))]
+        let toolbarAppearance=UIToolbarAppearance();toolbarAppearance.configureWithDefaultBackground()
+        toolbarAppearance.backgroundColor = .systemBackground
+        toolbarAppearance.shadowColor = .separator.withAlphaComponent(0.2)
+        toolbar.standardAppearance=toolbarAppearance;toolbar.scrollEdgeAppearance=toolbarAppearance
+        let iconStyle=UIImage.SymbolConfiguration(pointSize:18,weight:.regular,scale:.medium)
+        let undo=UIBarButtonItem(image:UIImage(systemName:"arrow.uturn.backward",withConfiguration:iconStyle),style:.plain,target:self,action:#selector(undo))
+        let redo=UIBarButtonItem(image:UIImage(systemName:"arrow.uturn.forward",withConfiguration:iconStyle),style:.plain,target:self,action:#selector(redo))
+        undo.accessibilityLabel="Undo";redo.accessibilityLabel="Redo"
+        let photoButton=UIBarButtonItem(image:UIImage(systemName:"photo",withConfiguration:iconStyle),style:.plain,target:self,action:#selector(photo))
+        photoButton.accessibilityLabel="Add screenshot"
+        undo.width=44;redo.width=44;photoButton.width=44
+        let inset=UIBarButtonItem(barButtonSystemItem:.fixedSpace,target:nil,action:nil);inset.width=8
+        let trailingInset=UIBarButtonItem(barButtonSystemItem:.fixedSpace,target:nil,action:nil);trailingInset.width=8
+        let doneButton=UIBarButtonItem(title:"Done",style:.plain,target:self,action:#selector(done))
+        doneButton.setTitleTextAttributes([.font:UIFont.preferredFont(forTextStyle:.subheadline)],for:.normal)
+        toolbar.items=[inset,undo,redo,photoButton,.flexibleSpace(),doneButton,trailingInset]
         editor.inputAccessoryView=toolbar
         document.statusChanged={ [weak self] text in self?.updateStatus(text) }
         updateStatus(document.status);document.begin()
-        navigationItem.rightBarButtonItems=[UIBarButtonItem(image:UIImage(systemName:"photo"),style:.plain,target:self,action:#selector(photo)),UIBarButtonItem(image:UIImage(systemName:"gearshape"),style:.plain,target:self,action:#selector(settings))]
-        if editor.text.isEmpty { editor.becomeFirstResponder() }
+        let newButton=UIBarButtonItem(title:"New note",style:.plain,target:self,action:#selector(newNote))
+        newButton.accessibilityLabel="New note"
+        let listButton=UIBarButtonItem(image:UIImage(systemName:"sidebar.left"),style:.plain,target:self,action:#selector(showNotes))
+        listButton.accessibilityLabel="Saved notes";navigationItem.leftBarButtonItem=listButton
+        let settingsButton=UIBarButtonItem(image:UIImage(systemName:"gearshape"),style:.plain,target:self,action:#selector(settings))
+        settingsButton.accessibilityLabel="Connection Settings"
+        navigationItem.rightBarButtonItems=[settingsButton,newButton]
+    }
+    override func viewDidAppear(_ animated:Bool) {
+        super.viewDidAppear(animated)
+        guard focusOnOpen else { return };focusOnOpen=false
+        document.editor.becomeFirstResponder()
+        document.editor.scrollRangeToVisible(document.editor.selectedRange)
     }
     override func viewWillDisappear(_ animated:Bool){super.viewWillDisappear(animated);document.save()}
     private func updateStatus(_ text:String) {
-        if let note=NotesStore.shared.note(noteID) { title=note.title }
+        updateWordCount()
         let busy=text=="Thinking…" || text=="Reading image…"
-        statusButton.setTitle(text,for:.normal);statusButton.titleLabel?.numberOfLines=2
+        var style=statusButton.configuration;style?.title=text;statusButton.configuration=style
+        statusButton.titleLabel?.numberOfLines=2
         busy ? activity.startAnimating() : activity.stopAnimating()
+        wordCount.isHidden=busy
         statusButton.accessibilityLabel=text
+    }
+    deinit { NotificationCenter.default.removeObserver(self) }
+    @objc private func updateWordCount() {
+        let count=document.editor.text.split(whereSeparator:{$0.isWhitespace}).count
+        wordCount.text="\(count) \(count == 1 ? "word" : "words")"
+    }
+    @objc private func showNotes(){navigationController?.popViewController(animated:true)}
+    @objc private func newNote(){
+        document.save()
+        let vc=storyboard!.instantiateViewController(withIdentifier:"NoteEditor") as! NoteEditorViewController
+        vc.noteID=NotesStore.shared.create().id;vc.focusOnOpen=true
+        if let navigationController { navigationController.setViewControllers([navigationController.viewControllers[0],vc],animated:false) }
     }
     @IBAction private func modelOptions(_ sender:Any) {
         let menu=UIAlertController(title:"Model following",message:document.status,preferredStyle:.actionSheet)
@@ -153,7 +240,15 @@ final class ConnectionSettingsViewController:UIViewController {
     @IBOutlet private weak var statusLabel:UILabel!
     @IBOutlet private weak var connectButton:UIButton!
     private var testing:Task<Void,Never>?
-    override func viewDidLoad(){super.viewDidLoad();let profile=ConnectionProfile();addressField.text=profile.address;modelField.text=profile.model;statusLabel.text="Connect to Ollama on your Mac. Notes always save on this iPhone.";addressField.accessibilityIdentifier="serverAddress";modelField.accessibilityIdentifier="modelName"}
+    override func viewDidLoad(){super.viewDidLoad();let profile=ConnectionProfile();addressField.text=profile.address;modelField.text=profile.model;statusLabel.text="Connect to Ollama on your Mac. Notes always save on this iPhone.";addressField.accessibilityIdentifier="serverAddress";modelField.accessibilityIdentifier="modelName"
+        navigationItem.largeTitleDisplayMode = .never
+        var connectStyle:UIButton.Configuration
+        if #available(iOS 26.0, *) { connectStyle = .prominentGlass() }
+        else { connectStyle = .filled() }
+        connectStyle.title="Test & Connect";connectStyle.cornerStyle = .capsule;connectStyle.buttonSize = .large
+        connectButton.configuration=connectStyle
+        statusLabel.textColor = .secondaryLabel
+    }
     @IBAction private func connect(_ sender:Any){
         var profile=ConnectionProfile();profile.address=addressField.text?.trimmingCharacters(in:.whitespacesAndNewlines) ?? "";profile.model=modelField.text?.trimmingCharacters(in:.whitespacesAndNewlines) ?? ""
         guard !profile.model.isEmpty else{statusLabel.text="Enter an installed model name.";return}

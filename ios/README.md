@@ -1,44 +1,32 @@
-# Lorca iOS — run the Notes build
+# Lorca iOS — implementation notes
 
-Open `LorcaIOS.xcodeproj`, select **LorcaIOS**, select an installed iPhone Simulator, and Run. The app uses UIKit, a real Main.storyboard, Auto Layout, UINavigationController, UITableView, UITextView and native alerts. Light mode is enforced. No SwiftUI or third-party dependencies.
+**Start here:** [Simulator quick start in the main README](../README.md#run-in-simulator--instructor-quick-start). The professor runs this app entirely in Simulator on the same Mac as Ollama. No phone, pairing adapter, LAN configuration, or signing team is required.
 
-## Instructor setup: local model required only for AI
+## Build and runtime
 
-Notes work and persist without any server. To see real model assistance:
+- Open `LorcaIOS.xcodeproj`; scheme **LorcaIOS**; choose an installed iPhone Simulator; ⌘R.
+- Xcode 26+ SDK is required to compile guarded native glass button styles. Deployment target: iOS 17. Verified build: Xcode 27.2, iOS 18 Simulator.
+- UIKit, Main.storyboard, Auto Layout, UINavigationController, UITableView, UITextView, native alerts and Photos picker. Light mode. No SwiftUI or third-party app dependencies.
+- Ollama runs on the Mac at `http://127.0.0.1:11434`. Use `qwen3:4b` for the smaller documented setup; `qwen3:14b` was used in the live acceptance check. Set the exact model in Settings.
 
-1. Install [Ollama](https://ollama.com/download) on your Mac and launch it.
-2. Download a model once. `ollama pull qwen3:4b` is a smaller option (about 2.5 GB); `ollama pull qwen3:14b` matches the model used for this build's live check and needs more memory/storage. Choose a model your Mac can run. No models are bundled or automatically downloaded by the app.
-3. In the iPhone Simulator app, open **Settings**. Address: `http://127.0.0.1:11434`. Model: the exact installed model name, such as `qwen3:4b`.
-4. Tap **Test & Connect**. Only an actual successful server/model check displays Connected.
-5. Done → + → write `Study guide for counting and permutations:` followed by topics, then start another paragraph. The local model works while you continue writing.
+## Source map
 
-The system's Simulator can reach the Mac's localhost. On a **physical iPhone**, localhost means the phone itself: use your Mac's Wi-Fi IP instead. Keep both devices on the same trusted network and allow Local Network permission. Ollama normally listens only on localhost; to allow your own phone, follow [Ollama's documented OLLAMA_HOST setup](https://docs.ollama.com/faq#how-do-i-configure-ollama-server). For the Ollama Mac app:
+- `AppDelegate.swift`: scene lifecycle, Storyboard launch, light mode.
+- `Base.lproj/Main.storyboard`: Notes list, editor and Connection Settings, outlets/actions and Auto Layout.
+- `Controllers.swift`: navigation, native editing controls, connection UI, Photos import and Vision OCR.
+- `NotesEngine.swift`: local storage/migration, passage selection, model requests, optional research, inline formatting/checklists, progress and undo behavior.
+- `../LorcaIOSUITests/NotesFlowTests.swift`: focused Simulator acceptance checks. The real-model test requires an installed `qwen3:14b`.
 
-```sh
-launchctl setenv OLLAMA_HOST "0.0.0.0:11434"
-```
+## Data and request flow
 
-Then quit/reopen Ollama and use `http://YOUR_MAC_WIFI_IP:11434` on the phone. This opens Ollama to devices that can reach that network interface: use only a trusted LAN, do not port-forward it, and restore localhost afterward with `launchctl unsetenv OLLAMA_HOST` and restart Ollama. This prototype does not implement the authenticated pairing originally proposed in Milestone 1.
+`Note` stores UUID, title, text, RTF data, generated/edited ranges, processed source snapshots and update time. `NotesStore` writes atomic `Documents/notes.json` inside the Simulator app sandbox. Earlier prototype drafts migrate without deleting the original preferences. Connection address/model and selected-note ID are in UserDefaults. There are no embedded credentials, model weights, user notes or build products in the submitted source archive.
 
-References: [Ollama network configuration](https://docs.ollama.com/faq), [chat API](https://docs.ollama.com/api/chat), [Qwen3 4B model](https://ollama.com/library/qwen3:4b).
+Settled passages are considered independently. Work waits briefly for typing to settle, sends a bounded source/context snapshot to Ollama `/api/chat`, checks the structured response and source, then inserts editable content below the author's writing. Changed/paused work is cancelled or rejected when stale. The inline pulsing cue is a UIKit view, not saved document text; Reduce Motion uses static dots.
 
-## Short demo flow
+`/api/tags` checks reachability and the installed model. The app does not silently download a model. Research requests use Exa over HTTPS and supply search evidence to the local model. No desktop Lorca/Rust backend is required. Screenshot import sends recognized text for summarization; it does not claim image understanding. Inference does not run on iOS.
 
-- Create a note, type a study-guide heading and topics, and show real inline output.
-- Keep original text and edit generated text in place. Show pause/retry from Model following.
-- Create Things to Do with several tasks; tap a checkbox and show completed items move down.
-- Return to Notes, search, rename, and show Delete → Cancel.
-- Relaunch and reopen a saved note.
-- Optionally import a screenshot through Photos; the text is recognized locally and can be summarized by the selected model.
+## Scope and history
 
-Text is sent to the configured Mac; inference is not on the iPhone. AI requires an awake reachable Mac. Web research additionally needs internet and sends a query to Exa. Notes are phone-local; there is no desktop synchronization. Tables are lightweight inline text columns, not the macOS NSTextTable implementation. Photo import summarizes recognized text rather than claiming full visual captioning. Calendar export is not in this iOS build.
+The earlier phone-to-Mac chat/pairing design is preserved in [Milestone 1](../docs/milestone-1.md). The final scope is a Simulator-first note editor. Desktop-note sync, authenticated phone pairing, iMessage, visual captioning and ICS export remain unimplemented.
 
-## Build command
-
-```sh
-xcodebuild -project LorcaIOS.xcodeproj -scheme LorcaIOS \
-  -sdk iphonesimulator -configuration Debug \
-  -derivedDataPath /tmp/lorca-ios-build CODE_SIGNING_ALLOWED=NO build
-```
-
-A physical device additionally requires your own Apple signing team. Existing Unit 8 videos remain historical; a new Milestone 2 video is still required before submission.
+See [requirements and validation limits](../REQUIREMENTS_REVIEW.md) and [video checklist](../VIDEO_DEMO.md).

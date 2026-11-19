@@ -1,239 +1,146 @@
-# Lorca iOS — Milestone 2
+# Lorca iOS
 
-A lightweight **UIKit + Storyboard** notes app in light mode. Write naturally; a model running on your Mac helps inline, without a separate chat screen.
+A lightweight **UIKit + Storyboard** notes app. Write naturally; a local model on the same Mac adds editable help beneath your writing. The iOS app runs in **Xcode Simulator**. Light mode, native text editing, no SwiftUI, no third-party app packages.
 
-## November 18, 2026 sprint update
+[Portfolio write-up](https://lalithu.github.io/blog/lorca-ios-notes-capstone/) · [Requirements review](REQUIREMENTS_REVIEW.md) · [Video checklist](VIDEO_DEMO.md)
 
-**Scope change:** Milestone 1 planned a local-model chat companion. Milestone 2 keeps that Mac-hosted inference and saved-history foundation, but makes notes the main interface. The original Milestone 1 submission, planning, wireframes and videos are preserved below. This is an iOS implementation inspired by my existing macOS Lorca Notes work, not the macOS UI or Rust runtime copied onto iPhone.
+## Run in Simulator — instructor quick start
 
-### Required features
+**You need:** a Mac, Xcode **26 or newer** with an installed iPhone Simulator runtime, and [Ollama for macOS](https://ollama.com/download/mac). The project targets iOS 17+; current native glass styles are guarded for iOS 26+. This build was checked with Xcode 27.2 and an iOS 18 Simulator. No physical phone, Apple Developer membership, signing team, desktop Lorca app, API key, or server project is needed.
 
-- [x] Create, edit and reopen notes saved on the iPhone, including offline.
-- [x] Configure a Mac/Ollama endpoint and model; test the actual connection and show failures.
-- [x] Receive real, editable model additions underneath the original writing. Independent settled passages can run while another is edited. Pause and retry controls are available.
-- [x] Organize notes with search, rename and confirmed deletion.
+### 1. Start Ollama and download a model
 
-### Optional features
+Install and open Ollama on the **same Mac** as Xcode. In Terminal:
 
-- [x] Checkable model task lists; completed items move below unchecked items.
-- [x] Screenshot import through the system photo picker and on-device text recognition.
-- [x] Current-information lookup through Exa for passages requiring web sources.
-- [x] Human edits inside model additions are amber; edited blocks lose their blue background.
-- [ ] Full on-device model inference, desktop-note synchronization, and the original iMessage stretch feature.
-- [ ] Event-flyer calendar export and full visual photo captioning from the macOS version.
+```sh
+ollama pull qwen3:4b
+ollama list
+curl http://127.0.0.1:11434/api/tags
+```
 
-### Build verification
+[Qwen3 4B](https://ollama.com/library/qwen3:4b) is approximately a 2.5 GB download; runtime memory needs are higher than the download size. Allow the first model load to finish. Keep Ollama running. If you use the standalone CLI instead of its Mac app, start `ollama serve` in another Terminal window. If it says the address is already in use, Ollama is already running.
 
-Xcode Simulator build succeeded. One real UI acceptance flow on iPhone 16 Pro / iOS 18 connected to the installed `qwen3:14b` on the Mac, generated an inline counting/permutations study guide, terminated/relaunched the app, and reopened the saved result. It passed in approximately 40 seconds. Additional paths are implemented; this is not a claim of exhaustive device testing.
+The app was tested with `qwen3:14b`; that larger model is optional. Any selected model must already be installed in Ollama and support the structured responses this app requests. No model weights are bundled.
 
-### Next deliverables
+### 2. Open and run the app
 
-- [ ] Record a **new** Milestone 2 demo and place its link here, above the old videos.
-- [ ] Finish submission packaging and final documentation review.
-- [ ] Submit the repository link and video through Canvas as requested by Andros; check the CodePath submission entry too.
+Download this repo with **Code → Download ZIP**, unzip it, and open:
 
-The new video has **not** been recorded or uploaded yet. Do not use the old prototype video as evidence of the new features.
+**`ios/LorcaIOS.xcodeproj`**
 
-### Screens and navigation
+In Xcode, select the **LorcaIOS** scheme and an installed **iPhone Simulator** destination, then press **⌘R**. Select a Simulator rather than “Any iOS Device.” If no Simulator runtime is installed, add one in Xcode Settings → Components. Notes can be written and saved before connecting the model.
 
-Notes list (stream/search) → Note editor (detail/creation) → Back to saved notes. Settings is modal from either screen and returns to the same note. Rename and Delete use native alerts. Photo import uses the system picker. There is no tab bar. The three core screens and their layout are in `Main.storyboard`, with native UIKit controllers and Auto Layout.
+### 3. Connect from inside Lorca iOS
 
-### Data and networking
+Tap the **gear in the upper-right corner**:
 
-`Note` stores UUID, title, authored/model text, RTF formatting, generated ranges, completed input snapshots and update time in atomic phone-local JSON. Previous prototype drafts migrate without deleting their original preferences. `ConnectionProfile` stores only the server address and model name; there is no account/password in this capstone. The app uses `URLSession` to call Ollama `/api/tags` and `/api/chat`. Requests are bounded and tool-free. Research sends only a query to Exa and supplies returned evidence to the local model. Model-generated text remains fallible and editable.
+| Field | Enter |
+| --- | --- |
+| Server address | `http://127.0.0.1:11434` |
+| Model name | `qwen3:4b` — replace the initial `qwen3:14b` value |
 
-### Run it
+Tap **Test & Connect**, wait for **Connected**, then **Done**. Simulator reaches the Mac’s localhost directly; leave Ollama on its default loopback configuration. No Wi-Fi IP, port forwarding, or `OLLAMA_HOST` change is needed.
 
-Open [ios/LorcaIOS.xcodeproj](ios/LorcaIOS.xcodeproj), choose the LorcaIOS scheme, and Run on an installed iPhone Simulator. No third-party packages. Follow [the instructor setup guide](ios/README.md) for the local model and physical-device networking.
+### 4. Try a note
 
----
+Tap **New note**, then type:
 
-## Milestone 1 — preserved submission history
+```text
+Study guide for counting and permutations:
+Explain factorials and give two short worked examples.
+```
 
-# Lorca for iOS
+Pause briefly or start a new paragraph. Three pulsing dots appear beside the passage while the model works. A real response appears below your original writing with blue highlighting. Edit it directly; human changes appear amber and the edited generated block loses its blue highlight. There is no separate response viewer to open.
 
-An original UIKit / Storyboard companion to [Lorca](https://github.com/lalithu/lorca).
+**If something doesn’t work:**
 
-**Unit 8 — Capstone Milestone 1 • November 4, 2026**  
-**Status:** Initial planning submission confirmed. A basic UIKit/Storyboard prototype has now been built and launched in iPhone Simulator; the [updated build demo](https://www.youtube.com/watch?v=PLGJzfdt1FM) is uploaded and linked below. Course resubmission is pending. Mac/Ollama networking and real model responses remain unimplemented. Existing desktop Lorca is prior work.
+- **Cannot connect:** keep Ollama open; run the `curl` command above and confirm the address ends in `:11434`.
+- **Model not installed:** run `ollama list` and enter the exact installed name, including its tag.
+- **Slow first response:** let the model load; close memory-heavy apps or use the smaller 4B model. A timed-out/unfinished request keeps your writing; use **Model following → Retry failed work**.
+- **No assistance:** check **Test & Connect**, resume **Model following** if paused, and write a concrete request. Ordinary writing may need no model addition.
+- **No cursor:** tap the note canvas. **Done** dismisses editing; tapping the canvas restores it.
 
-## Table of Contents
-1. [Overview](#overview)
-2. [Product Spec](#product-spec)
-3. [Wireframes](#wireframes)
-4. [Milestone 1 and Sprint Plan](#milestone-1-and-sprint-plan)
-5. [Schema](#schema)
+## Demo videos
 
-## Overview
+**Milestone 2 — current Notes app:** recording pending. The new video link will be placed here **before submission**, above both earlier videos. See the [simple recording checklist](VIDEO_DEMO.md).
 
-### Description
-Lorca for iOS lets a user chat from an iPhone with a local AI model running through Lorca and Ollama on the user's Mac. Users connect to their Mac, create conversations, send text prompts, read replies, and reopen locally saved history. The capstone will use UIKit, Storyboards, Auto Layout, a navigation controller, and table views.
+Earlier videos are retained as milestone history:
 
-The first release supports one user and one Mac on the same trusted local network while the Mac is awake and Lorca/Ollama are running. Inference runs on the Mac, not the iPhone. Text travels between the devices; this is local inference, not an entirely offline phone app. Historical conversations can be read offline on the phone. Cross-device synchronization of the existing desktop library is outside the MVP.
+- [Milestone 1 working UIKit/Storyboard prototype](https://www.youtube.com/watch?v=PLGJzfdt1FM) — 1:57.
+- [Milestone 1 planning walkthrough](https://youtu.be/8zSFkHlXAAA).
 
-An optional later iMessage bridge would let the user text a Lorca identity through ordinary Messages and receive replies from the Mac. It is a Mac-side integration, not an iPhone inbox listener. It is not required for the capstone MVP.
+## Completed features — Milestone 2
 
-### App Evaluation
-- **Category:** Productivity / developer tools / personal AI assistant.
-- **Mobile:** Quick access to a personally hosted assistant from an iPhone away from the desk, touch-based conversation navigation, and offline reading of saved chats. Optional camera/photo input and iMessage add mobile-native entry points. The MVP's AI request path requires reaching the paired Mac; its mobile value does not imply internet-wide access.
-- **Story:** A person who already runs Lorca should be able to ask their own local model a question from their phone without moving to the Mac or switching to a hosted AI provider.
-- **Market:** Initially individual Mac and iPhone users who already run Lorca/Ollama and prefer local inference. This is a specific niche, not a claim of measured market demand.
-- **Habit:** Short recurring conversations, follow-up questions, and revisiting saved explanations. Users both create prompts and consume responses.
-- **Scope:** A text-only, single-Mac companion with connection status, chat, and phone-local history. The existing Rust runtime remains on macOS. The main uncertainty is a securely paired phone-to-Mac transport, which must be validated before expanding scope. A stripped-down version remains useful with completed replies rather than streaming and a manually configured host rather than automatic discovery.
+### Required
 
-## Product Spec
+- [x] **R1: Notes and persistence.** Create, edit, and reopen notes saved in the Simulator, including when Ollama is unavailable.
+- [x] **R2: Real local-model connection.** Configure the endpoint/model, test the installed model, connect/disconnect, and show actionable connection errors.
+- [x] **R3: Editable inline help.** Original writing stays; model additions appear below it. Passage-local progress, independent passages, pause/retry, undo/redo, and distinct human edits support continued writing.
+- [x] **R4: Organization.** Search saved notes, rename them, and delete with confirmation.
 
-### 1. User Stories (Required and Optional)
+### Optional
 
-#### Required Must-have Stories
-- [ ] **R1 — Connect:** The user can configure one Mac endpoint and pairing credential, test the connection, and see connected, connecting, disconnected, or error status.
-- [ ] **R2 — Chat:** The user can send a nonempty text prompt and read a real reply from the Mac's local model. Follow-up prompts retain the selected conversation's context, and separate conversations keep separate contexts. While waiting, the app prevents duplicate submission and displays progress. Failures preserve the prompt and offer an explicit retry.
-- [ ] **R3 — Saved history:** The user can create a conversation, see it in a conversation list, reopen it, and read its saved prompts/replies after closing and relaunching the app, including when the Mac is unavailable.
-- [ ] **R4 — Organize conversations:** The user can rename a conversation and delete it after confirmation. Deletion applies to this app's phone-local history, not the pre-existing desktop library.
+- [x] **O1: Checkable task lists.** Model-generated task checkboxes toggle; checked items move below unchecked items.
+- [x] **O2: Screenshot text import.** The system photo picker and Apple Vision recognize screenshot text for a local-model summary.
+- [x] **O3: Research.** Current-information requests can use Exa search and supply returned evidence to the local model.
 
-#### Optional Nice-to-have Stories
-- [ ] **O1 — iMessage channel:** The user can text an allowlisted Lorca messaging identity and receive a response generated on the Mac, using a separate Mac-side bridge. This includes sender filtering, duplicate/echo suppression, and an explicit enable/disable control on the Mac.
-- [ ] **O2 — Streaming and stop:** The user can see response text arrive incrementally and stop generation, with partial-response status saved accurately.
-- [ ] **O3 — Image input:** The user can attach a photo for a compatible vision model, with explicit model and permission handling.
-- [ ] **O4 — Discovery:** The user can discover a Mac automatically instead of typing its address.
+AI inference runs on the **Mac**, not on the simulated iPhone. Ordinary note editing and saved notes work offline; AI requires Ollama. Research additionally needs internet and sends a search query to Exa. Screenshot import recognizes text; it is not general visual captioning. Tables are simple inline text columns. Desktop synchronization, calendar/ICS export, authenticated phone pairing, background generation guarantees, and the original iMessage idea are outside this submission.
 
-The R1–R4 checkboxes track the complete MVP requirements. The basic build below implements only a subset, so incomplete MVP stories remain unchecked. Digital wireframes describe the full intended interface.
+## App evaluation
 
-### 2. Screen Archetypes
+- **Category / audience:** productivity; students and local-model users who want to develop rough notes in place.
+- **Mobile:** native touch editing, checkable tasks, photo-library input and local saved notes. The instructor evaluates the same iOS app in Simulator.
+- **Story / habit:** write assignments, study topics and tasks in one page; revisit and edit the results without maintaining a separate chat.
+- **Market / scope:** a focused personal-note tool for people already willing to run a local model. No measured demand is claimed. The MVP is one user's local notes with Mac-hosted inference; no account, sync service or on-device inference.
 
-| Screen / archetype | Purpose and controls | Required stories |
-|---|---|---|
-| Conversations / Stream | Saved conversation titles and previews; New Chat; Settings; rename and delete actions; empty state | R3, R4 |
-| Chat / Detail + Creation | Transcript, multiline prompt field, Send, waiting indicator, explicit retry, connection status | R2, R3 |
-| Connection Settings / Settings | Host/address, pairing credential, Test & Save, connection result, Disconnect | R1 |
-| Rename / modal | Current title, edited title, Save/Cancel | R4 |
-| Delete confirmation / alert | Conversation name, Cancel and Delete; explains local scope | R4 |
+## Screens and navigation
 
-The empty, waiting, failed, and offline views are states of these screens, not additional top-level destinations.
+Launch opens the last selected note, or an empty note on first use. **Notes** is the writing canvas; **New note** creates another. The upper-left list icon opens **Saved notes**, with search and swipe actions. The upper-right gear opens modal **Connection Settings**; Done returns to the same note. The keyboard toolbar offers Undo, Redo, screenshot import, and Done. **Model following** opens pause/resume and retry controls.
 
-### 3. Navigation
+All three core scenes are in [Main.storyboard](ios/LorcaIOS/Base.lproj/Main.storyboard), with UIKit, Auto Layout and a navigation controller. No tab bar is needed for this flow.
 
-#### Tab Navigation (Tab to Screen)
-There is no tab bar in the MVP. A navigation controller supports the small hierarchy; Settings is presented modally in its own navigation container. The template asks us to document tab navigation, not to introduce unused tabs.
+```mermaid
+flowchart LR
+    Launch --> Canvas[Notes canvas]
+    Canvas <--> Saved[Saved notes / search]
+    Canvas <--> Settings[Connection Settings]
+    Saved <--> Settings
+    Canvas --> New[New note]
+    New --> Canvas
+```
 
-#### Flow Navigation (Screen to Screen)
-- **Launch → Conversations:** load phone-local history and show current connection state. On first launch show an empty state with Connect to Mac and New Chat.
-- **Conversations → Chat:** tap an existing conversation, or tap New Chat to create/open an empty one. Back returns to Conversations.
-- **Conversations → Connection Settings:** tap Settings or Connect to Mac. Done returns to Conversations.
-- **Chat → Connection Settings:** tap a disconnected connection banner. Done returns to the same Chat and preserves its draft.
-- **Connection Settings → same screen:** Test & Save displays connecting, then success or an actionable failure. A failed test does not claim a valid connection. Disconnect stops using the connection and returns the state to disconnected; historical chats remain readable.
-- **Conversations → Rename modal → Conversations:** choose Rename; Save updates the local title; Cancel leaves it unchanged.
-- **Conversations → Delete confirmation → Conversations:** choose Delete; Cancel keeps the conversation; confirmed Delete removes local history for that conversation.
-- **Chat → same Chat:** Send creates one request and displays waiting; success saves the reply; failure preserves the prompt and shows Retry. Returning to the screen never automatically resends a request.
+## Sprint update and verification
 
-### MVP Acceptance Criteria
+**November 18, 2026:** changed the planned chat companion into a notes-first interface while retaining local-model inference and local saved history. UIKit/Storyboard remains the implementation constraint. The original authenticated phone-to-Mac pairing plan was replaced by a simpler **Simulator → localhost Ollama** setup. See [sprint history](SPRINT_PLAN.md) and the [requirement mapping](REQUIREMENTS_REVIEW.md).
 
-| Story | Observable acceptance criteria |
-|---|---|
-| R1 | Successful authorized connection is distinguished from wrong credentials, unreachable Mac, and incompatible service; denied local-network permission is explained. Credentials are not shown in logs/screenshots or stored in plain preferences. |
-| R2 | A real prompt reaches Lorca and produces a real model reply; empty prompts cannot be sent; repeated taps do not duplicate a request; a follow-up refers to earlier messages in the selected chat without importing another chat's context; failure is visibly different from an empty successful response. |
-| R3 | Create at least two chats, send messages, relaunch, and reopen the correct history. Disconnect the Mac and confirm saved history remains readable. Draft-only chats have a sensible title. |
-| R4 | Rename persists after relaunch. Cancelled deletion retains history. Confirmed deletion removes only the selected phone-local conversation. |
+Verified on iPhone 16 Pro Simulator / iOS 18: successful build, real `qwen3:14b` connection and inline generation, progress cue appearing/clearing, original-text preservation, relaunch persistence, and cursor focus/tap-to-edit. Other implemented paths have not all been exhaustively tested; no physical-device or iOS 26 glass preview is claimed.
 
-### Boundaries and Failure Behavior
-- MVP requests originate on the phone. Desktop history import, shared-library editing, and automatic synchronization are not promised.
-- One active request at a time. Model/workspace selection, remote code execution, command approvals, Job Apps, Gmail, and Google Sheets integration are outside the MVP.
-- Mac offline/asleep: show unavailable status, preserve drafts/history, and let the user explicitly retry after reconnecting.
-- App backgrounded or connection lost: do not promise uninterrupted generation or automatic resume. Reconcile request status before any explicit retry; never blindly replay a prompt.
-- No public Ollama port, router forwarding, account registration, or cloud model is required for the proposed same-network MVP.
-- Sample data in designs is fictional. Demo data must never be represented as a live model response.
+[Actual Simulator screenshot](docs/images/notes-inline.png) · [Architecture / data details](ios/README.md)
 
-## Wireframes
+## Submission status
 
-### Hand-sketched Wireframes
+- [x] Buildable Xcode project, shared scheme, assets and source included.
+- [x] Current README, sprint update, required/optional feature list, setup and video instructions.
+- [x] Milestone 1 planning, hand sketch, digital wireframes and both old videos preserved.
+- [x] Public repository readable by instructor **aslowle1** without an invitation.
+- [ ] Record/upload the new demo; insert its link above the older videos.
+- [ ] Student submits the repository and video through **Canvas**, per Andros’s email, and checks the CodePath Unit 9 submission entry.
+- [ ] Confirm submission receipt. Due **November 18, 2026, 11:59 p.m. EST** per the supplied Unit 9 page.
 
-![Hand-sketched core screens and navigation](wireframes/hand-sketch-main.jpg)
+[Final checklist](SUBMISSION_CHECKLIST.md) · [Preserved Milestone 1 specification and videos](docs/milestone-1.md) · [Brainstorming](brainstorming.md) · [Hand sketch and digital wireframes](wireframes/README.md)
 
-Student-drawn low fidelity wireframes show Conversations, Chat, Connection Settings, and navigation arrows. The digital sheets below supplement this overview with readable control labels, Rename/Delete dialogs, and loading/offline/error states.
+The supplied rubric requires at least **three required features and one optional feature**; the current scope lists four required and three optional. Digital wireframes and an interactive-prototype GIF are bonus items; digital wireframes are included, but no interactive prototype/GIF is claimed. Grading remains the instructor’s decision.
 
-See the [requirement-by-requirement review](REQUIREMENTS_REVIEW.md) and [wireframe annotations](wireframes/README.md).
+## Build from Terminal (optional)
 
-### [BONUS] Digital Wireframes & Mockups
-These are digital low fidelity planning drawings, not app screenshots or photographs of hand sketches. They show all planned MVP screens, controls, states, and navigation. Bonus credit is subject to instructor evaluation; no Figma source or interactive prototype is claimed.
+From the repository root:
 
-![Core screens and controls](wireframes/01-core-screens.png)
+```sh
+xcodebuild -project ios/LorcaIOS.xcodeproj -scheme LorcaIOS \
+  -sdk iphonesimulator -configuration Debug \
+  -derivedDataPath /tmp/lorca-ios-build CODE_SIGNING_ALLOWED=NO build
+```
 
-![Empty, waiting, offline and failure states](wireframes/02-screen-states.png)
+UI acceptance tests use the existing local `qwen3:14b` installation. They are not required to launch or grade the app. For normal evaluation, follow the quick start above with the smaller model.
 
-![Navigation and modal flow](wireframes/03-navigation-flow.png)
-
-![Rename, delete and connection-error controls](wireframes/04-dialogs-and-connection.png)
-
-### [BONUS] Interactive Prototype
-Not created. Static flow diagrams are not an interactive prototype, and no prototype GIF is claimed.
-
-## Milestone 1 and Sprint Plan
-
-### November 4, 2026 — Planning
-- [x] Six brainstormed concepts and evaluations of the top three: [brainstorming.md](brainstorming.md).
-- [x] Selected app, description, and evaluation.
-- [x] Required and optional user stories.
-- [x] Screen archetypes and navigation flows.
-- [x] Digital low fidelity wireframe images and navigation diagram.
-- [x] Sprint goals, feasibility risks, and planned acceptance checks: [SPRINT_PLAN.md](SPRINT_PLAN.md).
-- [x] Public capstone repository: [lalithu/lorca-ios](https://github.com/lalithu/lorca-ios). Planning documents, digital wireframes, and hand-sketch photo committed.
-- [x] Photographed hand-sketched core screens and navigation uploaded and embedded.
-- [x] Submitted through Unit 8 Projects on November 4, 2026 with the planning walkthrough video, 4 hours, and clarification note. CodePath confirmed receipt.
-
-**Initial submission:** The planning artifacts were submitted before implementation began. The basic Storyboard build described below was added afterward. Mac integration remains unimplemented. A [Milestone 1 planning walkthrough](https://youtu.be/8zSFkHlXAAA) is included; it demonstrates planning work rather than a functioning iOS build. The rubric classifies checked-off app features and a build-progress video as Unit 8 bonus work; the Projects page also uses mandatory-sounding video wording. See [submission checklist](SUBMISSION_CHECKLIST.md) for that unresolved wording conflict.
-
-**Next:** validate the Mac connection architecture, then build the UIKit/Storyboard flow and real chat behavior in bounded sprints. Preserve this milestone entry when adding later progress, challenges, and demo videos.
-
-### Milestone 1 Videos
-
-**Current app demo:** [Lorca for iOS Milestone 1 — working Storyboard prototype](https://www.youtube.com/watch?v=PLGJzfdt1FM) (1:57, Unlisted). Use this link for the updated Unit 8 submission.
-
-**Earlier planning walkthrough:** [Initial planning video](https://youtu.be/8zSFkHlXAAA). This records brainstorming, the product specification, and wireframes before iOS implementation began; it is retained as milestone history.
-
-### Basic Storyboard Build — November 4, 2026
-
-Source: [ios/LorcaIOS.xcodeproj](ios/LorcaIOS.xcodeproj) • [Run instructions and demo flow](ios/README.md)
-
-**Completed build progress:**
-- [x] Three UIKit/Storyboard screens: Conversations, Chat, Connection Settings.
-- [x] Navigation from New/open conversation to Chat; modal Settings and return.
-- [x] Create conversations stored locally on the phone.
-- [x] Save and restore a message draft locally.
-- [x] Save, restore, and clear the Mac address locally.
-- [x] Added the requested 🫍 emoji app icon and a minimal branded navigation title.
-- [ ] Actual Mac connection, pairing, and real model responses.
-- [x] Uploaded and linked the [updated app demo](https://www.youtube.com/watch?v=PLGJzfdt1FM) (1:57, Unlisted).
-
-**Additional code:** swipe actions implement Rename and confirmed Delete; these are not claimed as a fully verified MVP story yet.
-
-**Validation:** Simulator build succeeded with Xcode 27. The app launched on iPhone 18 Pro / iOS 27, and New opened the Chat scene. The final emoji-icon build succeeded and launched. Verified New → Chat, draft persistence across app restart, Settings opening, local address saving, and Done returning home. Rename/Delete and all edge cases have not been exhaustively tested.
-
-**Challenge:** iOS 27 requires scene lifecycle adoption. Added a SceneDelegate and explicit Storyboard window initialization to fix launch.
-
-**Next:** resubmit with the updated app-demo link, then implement authenticated Mac networking. The student will handle the resubmission. Saved addresses are not a successful connection, drafts are not sent messages, and Send stays disabled. No mock AI output is presented as live inference.
-
-### Video Note
-
-The initial submission included a planning walkthrough because the rubric classified Unit 8 build-video work as bonus. This follow-up adds actual app progress to address the project's request for an app demo. The original planning video is retained as history. The [updated app demo](https://www.youtube.com/watch?v=PLGJzfdt1FM) is uploaded and linked for resubmission; it demonstrates the basic prototype, with networking and real AI responses still unfinished.
-
-## Schema
-
-This section will be completed in Unit 9, as directed by the course template. The notes below are planning candidates, not implemented contracts.
-
-### Models
-Planned candidates: phone-local Conversation and Message, ConnectionProfile, and a request identifier/status. Decide storage and exact fields in Unit 9. Pairing credentials belong in Keychain, separate from ordinary history.
-
-### Networking
-Planned: an authenticated connection to a reachable Mac service that invokes Lorca locally. Existing Lorca transport is loopback-only; secure pairing and a mobile-access adapter are new work. Exact endpoints, protocol, and reconnect behavior are undecided. No Parse backend is assumed.
-
-## References and Attribution
-- [Unit 8 Overview and live deadline](https://courses.codepath.org/courses/ios101/unit/8#!overview)
-- [Unit 8 Lab](https://courses.codepath.org/courses/ios101/unit/8#!labs)
-- [Unit 8 Project](https://courses.codepath.org/courses/ios101/unit/8#!projects)
-- [Official Capstone README Template](https://courses.codepath.org/snippets/ios101/readme_templates/capstone_readme)
-- [Student grading rubric](https://courses.codepath.org/courses/ios101/pages/grading)
-- [Existing Lorca desktop project](https://github.com/lalithu/lorca) — prior personal work: Rust runtime, Ollama integration, macOS UI. The proposed iOS app and iMessage bridge are new work.
-- [Lorca transport source](https://github.com/lalithu/lorca/blob/main/src/transport.rs)
-- [Apple: local network privacy](https://developer.apple.com/documentation/technotes/tn3179-understanding-local-network-privacy)
-
-Planning text and digital wireframes were prepared with Codex assistance and reviewed alongside the student. The wireframes describe intended behavior; implemented and verified prototype progress is listed separately above. No user research testing is claimed.
+Prior work: [Lorca macOS](https://github.com/lalithu/lorca) and the [original embedded-model interface write-up](https://lalithu.github.io/blog/embedded-model-note-interface/). This capstone is a UIKit/Storyboard iOS implementation. Documentation and implementation were prepared with Codex assistance and reviewed by the student; model responses remain editable and may be incorrect.

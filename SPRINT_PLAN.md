@@ -1,3 +1,17 @@
+# Milestone 2 sprint result — November 18, 2026
+
+The final scope is **Simulator-first notes**, built with UIKit and Storyboard. The original chat/physical-phone transport plan below is preserved as history. Direct Mac-local Ollama replaces the proposed pairing adapter; no authenticated phone connection is claimed.
+
+Completed: saved editable notes; real model connection and inline help; independent settled passages; native editable model formatting and amber human edits; undo/redo; checklist completion sorting; screenshot OCR; optional Exa research; search/rename/confirmed deletion; passage-level progress; simplified light canvas and reliable tap-to-edit focus.
+
+Verification: Simulator build, live qwen3:14b generation/persistence and progress checks, and focused cursor check passed. Organization/checklists should be shown in the final demo; not every edge case is covered. See REQUIREMENTS_REVIEW.md for limits.
+
+Remaining: student records a new video, adds its link above earlier videos, submits through Canvas/checks CodePath and saves receipt. Deadline supplied: November 18, 2026, 11:59 p.m. EST.
+
+---
+
+## Original Milestone 1 sprint plan (historical)
+
 # Sprint Plan and Feasibility Notes
 
 ## Scope and Schedule

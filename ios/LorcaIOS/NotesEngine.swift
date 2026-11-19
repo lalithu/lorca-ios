@@ -221,7 +221,7 @@ struct Passage {
     let id: UUID
     var statusChanged: ((String) -> Void)?
     var paused = false { didSet { reconsider() } }
-    var status = "Model following · connect in Settings" { didSet { statusChanged?(status) } }
+    var status = "Model following · connect in Settings" { didSet { refreshWorkingCue();statusChanged?(status) } }
     private var completed: Set<String>
     private var pending: Task<Void,Never>?
     private var activeSource: String?
@@ -234,7 +234,7 @@ struct Passage {
         id=note.id; title=note.title; completed=Set(note.completed)
         super.init()
         editor.delegate=self
-        editor.backgroundColor = .white; editor.textColor = .label; editor.alwaysBounceVertical=true
+        editor.backgroundColor = .white; editor.textColor = .label; editor.tintColor = .systemBlue; editor.alwaysBounceVertical=true
         editor.font = .preferredFont(forTextStyle:.body); editor.adjustsFontForContentSizeCategory=true
         editor.textContainerInset=UIEdgeInsets(top:20,left:18,bottom:40,right:18)
         editor.keyboardDismissMode = .interactive; editor.accessibilityIdentifier="noteEditor"
@@ -294,10 +294,14 @@ struct Passage {
         }
         NotesStore.shared.update(Note(id:id,title:title,text:storage.string,richText:rich,blocks:blocks,completed:Array(completed).sorted(),userEdits:edits,updatedAt:Date()))
     }
+    private func refreshWorkingCue() {
+        let passage=activeSource.flatMap { source in Passage.find(in:editor.textStorage).first{$0.source==source} }
+        editor.showWorking(status == "Thinking…" && !paused ? passage?.range.location : nil)
+    }
     private func reconsider() {
         guard !adding else { return }
         let passages=Passage.find(in:editor.textStorage)
-        if let activeSource,passages.contains(where:{$0.source==activeSource}),!paused,UserDefaults.standard.bool(forKey:"lorca.ios.connected") { return }
+        if let activeSource,passages.contains(where:{$0.source==activeSource}),!paused,UserDefaults.standard.bool(forKey:"lorca.ios.connected") { refreshWorkingCue();return }
         pending?.cancel(); pending=nil; activeSource=nil; generation=UUID()
         guard !paused else { status="Model following · paused"; return }
         guard UserDefaults.standard.bool(forKey:"lorca.ios.connected") else { status="Model following · connect in Settings"; return }
@@ -413,13 +417,77 @@ struct Passage {
 final class NoteTextView:UITextView {
     var onChecklist:((Int)->Void)?
     var onUndoRedo:(()->Void)?
-    override init(frame:CGRect,textContainer:NSTextContainer?) { super.init(frame:frame,textContainer:textContainer);addGestureRecognizer(UITapGestureRecognizer(target:self,action:#selector(checkTapped))) }
+    private var workingLocation:Int?
+    private var workingCue:NoteWorkingCue?
+    private var pendingCue:DispatchWorkItem?
+    func showWorking(_ location:Int?) {
+        guard location != workingLocation else { return }
+        pendingCue?.cancel();pendingCue=nil
+        workingCue?.removeFromSuperview();workingCue=nil;workingLocation=location
+        guard let location else { return }
+        let pending=DispatchWorkItem { [weak self] in
+            guard let self,self.workingLocation==location else { return }
+            let cue=NoteWorkingCue();self.workingCue=cue;self.addSubview(cue);self.positionWorkingCue()
+        }
+        pendingCue=pending
+        DispatchQueue.main.asyncAfter(deadline:.now()+0.18,execute:pending)
+    }
+    override func layoutSubviews() { super.layoutSubviews();positionWorkingCue() }
+    private func positionWorkingCue() {
+        guard let cue=workingCue,let location=workingLocation,textStorage.length>0 else { return }
+        let paragraph=(textStorage.string as NSString).lineRange(for:NSRange(location:min(location,textStorage.length-1),length:0))
+        layoutManager.ensureLayout(for:textContainer)
+        let glyphs=layoutManager.glyphRange(forCharacterRange:NSRange(location:paragraph.location,length:1),actualCharacterRange:nil)
+        let rect=layoutManager.boundingRect(forGlyphRange:glyphs,in:textContainer)
+        cue.frame=CGRect(x:max(0,textContainerInset.left-18),y:rect.minY+textContainerInset.top,width:18,height:20)
+    }
+    private var checklistTap:UITapGestureRecognizer?
+    override init(frame:CGRect,textContainer:NSTextContainer?) {
+        super.init(frame:frame,textContainer:textContainer)
+        let tap=UITapGestureRecognizer(target:self,action:#selector(checkTapped));tap.cancelsTouchesInView=false
+        checklistTap=tap;addGestureRecognizer(tap)
+    }
     required init?(coder:NSCoder) { super.init(coder:coder) }
-    @objc private func checkTapped(_ gesture:UITapGestureRecognizer) {
-        let p=gesture.location(in:self),local=CGPoint(x:p.x-textContainerInset.left,y:p.y-textContainerInset.top)
+    private func checkbox(at point:CGPoint)->Int? {
+        let local=CGPoint(x:point.x-textContainerInset.left,y:point.y-textContainerInset.top)
         let index=layoutManager.characterIndex(for:local,in:textContainer,fractionOfDistanceBetweenInsertionPoints:nil)
-        guard index<textStorage.length, ["☐","☑"].contains((textStorage.string as NSString).substring(with:NSRange(location:index,length:1))) else{return}
+        guard index<textStorage.length,["☐","☑"].contains((textStorage.string as NSString).substring(with:NSRange(location:index,length:1))) else{return nil}
         let glyph=layoutManager.glyphRange(forCharacterRange:NSRange(location:index,length:1),actualCharacterRange:nil)
-        if layoutManager.boundingRect(forGlyphRange:glyph,in:textContainer).insetBy(dx:-6,dy:-3).contains(local){onChecklist?(index)}
+        return layoutManager.boundingRect(forGlyphRange:glyph,in:textContainer).insetBy(dx:-6,dy:-3).contains(local) ? index : nil
+    }
+    @objc private func checkTapped(_ gesture:UITapGestureRecognizer) {
+        let point=gesture.location(in:self)
+        if let index=checkbox(at:point) { onChecklist?(index);return }
+        // Ordinary taps must restore editing after Done, including on an empty canvas.
+        if !isFirstResponder { becomeFirstResponder() }
+        if let position=closestPosition(to:point) { selectedTextRange=textRange(from:position,to:position) }
+    }
+}
+
+/// Matches the Mac margin cue without adding characters, undo actions, or touch targets.
+private final class NoteWorkingCue:UIView {
+    override init(frame:CGRect) {
+        super.init(frame:frame)
+        isUserInteractionEnabled=false;isAccessibilityElement=true
+        accessibilityLabel="Model working on this passage";accessibilityIdentifier="notes-model-working"
+        NotificationCenter.default.addObserver(self,selector:#selector(updateDots),name:UIAccessibility.reduceMotionStatusDidChangeNotification,object:nil)
+        updateDots()
+    }
+    convenience init(){self.init(frame:.zero)}
+    required init?(coder:NSCoder){super.init(coder:coder);updateDots()}
+    deinit { NotificationCenter.default.removeObserver(self) }
+    @objc private func updateDots() {
+        layer.sublayers?.forEach{$0.removeFromSuperlayer()}
+        for index in 0..<3 {
+            let dot=CALayer();dot.frame=CGRect(x:2+index*5,y:8,width:3,height:3)
+            dot.cornerRadius=1.5;dot.backgroundColor=UIColor.systemBlue.withAlphaComponent(0.8).cgColor;dot.opacity=0.55
+            layer.addSublayer(dot)
+            guard !UIAccessibility.isReduceMotionEnabled else { continue }
+            let pulse=CAKeyframeAnimation(keyPath:"opacity")
+            pulse.values=[0.25,0.8,0.25];pulse.keyTimes=[0,0.5,1];pulse.duration=1.6
+            pulse.beginTime=CACurrentMediaTime()+Double(index)*0.15;pulse.repeatCount = .infinity
+            pulse.timingFunctions=[CAMediaTimingFunction(name:.easeInEaseOut),CAMediaTimingFunction(name:.easeInEaseOut)]
+            dot.add(pulse,forKey:"following")
+        }
     }
 }
