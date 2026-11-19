@@ -55,14 +55,21 @@ struct Note: Codable {
 }
 extension Notification.Name { static let notesChanged = Notification.Name("LorcaNotesChanged") }
 
-struct ConnectionProfile {
-    var address: String {
-        get { UserDefaults.standard.string(forKey: "lorca.ios.macAddress") ?? "http://127.0.0.1:11434" }
-        set { UserDefaults.standard.set(newValue, forKey: "lorca.ios.macAddress") }
+struct ConnectionProfile: Codable {
+    var address:String
+    var model:String
+    private static let storageKey="lorca.ios.connectionProfile.v1"
+    init() {
+        if let data=UserDefaults.standard.data(forKey:Self.storageKey),
+           let saved=try? JSONDecoder().decode(Self.self,from:data) {
+            self=saved
+        } else {
+            address=UserDefaults.standard.string(forKey:"lorca.ios.macAddress") ?? "http://127.0.0.1:11434"
+            model=UserDefaults.standard.string(forKey:"lorca.ios.model") ?? "qwen3:14b"
+        }
     }
-    var model: String {
-        get { UserDefaults.standard.string(forKey: "lorca.ios.model") ?? "qwen3:14b" }
-        set { UserDefaults.standard.set(newValue, forKey: "lorca.ios.model") }
+    func save() {
+        if let data=try? JSONEncoder().encode(self) { UserDefaults.standard.set(data,forKey:Self.storageKey) }
     }
     func endpoint(_ path: String) throws -> URL {
         var value = address.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -91,10 +98,25 @@ struct Proposal: Decodable {
 struct Proposals: Decodable { let suggestions: [Proposal] }
 
 struct LocalModelClient {
-    static func test(_ profile: ConnectionProfile) async throws -> [String] {
-        let data = try await request(profile: profile, path: "/api/tags", body: nil, timeout: 8)
-        struct Tags: Decodable { struct Model: Decodable { let name: String }; let models: [Model] }
-        return try JSONDecoder().decode(Tags.self, from: data).models.map(\.name)
+    // Completion escapes this function and is delivered on the main queue for UIKit.
+    @discardableResult
+    static func test(_ profile:ConnectionProfile,completion:@escaping (Result<[String],Error>)->Void)->URLSessionDataTask? {
+        let url:URL
+        do { url=try profile.endpoint("/api/tags") }
+        catch { DispatchQueue.main.async{completion(.failure(error))};return nil }
+        var request=URLRequest(url:url);request.timeoutInterval=8
+        let task=URLSession.shared.dataTask(with:request) { data,response,error in
+            let result:Result<[String],Error>=Result {
+                if let error { throw error }
+                guard let http=response as? HTTPURLResponse,(200..<300).contains(http.statusCode),let data else {
+                    throw NotesError("Cannot reach Ollama. Check the address and keep Ollama running.")
+                }
+                struct Tags:Decodable { struct Model:Decodable { let name:String };let models:[Model] }
+                return try JSONDecoder().decode(Tags.self,from:data).models.map(\.name)
+            }
+            DispatchQueue.main.async { completion(result) }
+        }
+        task.resume();return task
     }
     static func follow(_ text: String, context: String?, profile: ConnectionProfile) async throws -> [Proposal] {
         let string: [String:Any] = ["type":"string"]
@@ -169,9 +191,17 @@ struct LocalModelClient {
         let raw = String(decoding:data,as:UTF8.self)
         let candidates = raw.trimmingCharacters(in:.whitespacesAndNewlines).hasPrefix("{") ? [raw] : raw.components(separatedBy:.newlines).filter { $0.hasPrefix("data: ") }.map { String($0.dropFirst(6)) }
         for candidate in candidates {
-            guard let json = try? JSONSerialization.jsonObject(with:Data(candidate.utf8)) as? [String:Any], let result = json["result"] as? [String:Any], result["isError"] as? Bool != true,
-                  let content = result["content"] as? [[String:Any]] else { continue }
-            let text = content.compactMap { $0["text"] as? String }.joined(separator:"\n")
+            struct SearchResponse:Decodable {
+                struct Payload:Decodable {
+                    struct Content:Decodable { let text:String? }
+                    let isError:Bool?
+                    let content:[Content]?
+                }
+                let result:Payload?
+            }
+            guard let response=try? JSONDecoder().decode(SearchResponse.self,from:Data(candidate.utf8)),
+                  let result=response.result,result.isError != true,let content=result.content else { continue }
+            let text=content.compactMap(\.text).joined(separator:"\n")
             if !text.isEmpty { return String(text.prefix(10_000)) }
         }
         throw NotesError("Search returned no sources. Your writing is unchanged.")

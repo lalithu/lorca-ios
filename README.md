@@ -123,7 +123,7 @@ Verified on iPhone 16 Pro Simulator / iOS 18: successful build, real `qwen3:14b`
 
 ## Canvas rubric clarification
 
-The final Canvas page explicitly requires a `UITabBarController`; Notes and Settings tabs were added after the main demo recording. The original CodePath feature/video checklist remains covered. See REQUIREMENTS_REVIEW.md for the newly supplied technical checklist and remaining evidence questions. Prepare a **four-minute maximum class presentation** covering walkthrough, code structure and improvements, and attend both demo days. The page does not state a maximum duration for the separately uploaded usage video.
+The final Canvas page explicitly requires a `UITabBarController`; Notes and Settings tabs were added after the main demo recording. The original CodePath feature/video checklist remains covered. The connection profile now demonstrates custom Codable data saved in UserDefaults; Test & Connect uses an explicit escaping URLSession completion handler. See REQUIREMENTS_REVIEW.md for the technical checklist. Prepare a **four-minute maximum class presentation** covering walkthrough, code structure and improvements, and attend both demo days. The page does not state a maximum duration for the separately uploaded usage video.
 
 ## Submission status
 
@@ -138,6 +138,17 @@ The final Canvas page explicitly requires a `UITabBarController`; Notes and Sett
 [Final checklist](SUBMISSION_CHECKLIST.md) · [Preserved Milestone 1 specification and videos](docs/milestone-1.md) · [Brainstorming](brainstorming.md) · [Hand sketch and digital wireframes](wireframes/README.md)
 
 The supplied rubric requires at least **three required features and one optional feature**; the current scope lists four required and three optional. Digital wireframes and an interactive-prototype GIF are bonus items; digital wireframes are included, but no interactive prototype/GIF is claimed. Grading remains the instructor’s decision.
+
+## Technical rubric source map
+
+| Requirement | Source evidence |
+| --- | --- |
+| Tab bar / Storyboard | `Main.storyboard`: root UITabBarController, Notes and Settings navigation controllers |
+| Custom Codable data in UserDefaults | `NotesEngine.swift`: `ConnectionProfile`, JSONEncoder/JSONDecoder, `lorca.ios.connectionProfile.v1` |
+| Escaping closure / API completion | `NotesEngine.swift`: `LocalModelClient.test(_:completion:)`, `@escaping`, URLSession.dataTask, Result and main-queue delivery; used in Settings |
+| Public API | `LocalModelClient.search`: Exa HTTPS endpoint, Decodable SearchResponse structs; returned sources inform the inline model result |
+| Non-table protocols | UITextViewDelegate, PHPickerViewControllerDelegate, UISearchResultsUpdating and Codable |
+| Structs, classes, enum, optionals, casts | Note/ConnectionProfile/Proposal, controllers/NoteDocument, NoteDocuments enum, safe optional binding and UIKit controller casts |
 
 ## Build from Terminal (optional)
 

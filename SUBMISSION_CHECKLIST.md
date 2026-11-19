@@ -14,7 +14,7 @@
 
 - [x] Storyboard UITabBarController added with Notes and Settings tabs.
 - [ ] Record/link a short tab-navigation addendum; keep the full usage video.
-- [ ] Resolve the custom Codable/UserDefaults and explicit escaping-closure evidence questions described in REQUIREMENTS_REVIEW.md.
+- [x] Codable ConnectionProfile is stored/restored through UserDefaults; the URLSession connection check uses an explicit @escaping completion closure. Public Exa response parsing is documented.
 - [ ] Prepare the four-minute maximum class presentation and attend both demo days.
 
 ## Final hand-in

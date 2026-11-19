@@ -19,7 +19,7 @@
 
 ## Data and request flow
 
-`Note` stores UUID, title, text, RTF data, generated/edited ranges, processed source snapshots and update time. `NotesStore` writes atomic `Documents/notes.json` inside the Simulator app sandbox. Earlier prototype drafts migrate without deleting the original preferences. Connection address/model and selected-note ID are in UserDefaults. There are no embedded credentials, model weights, user notes or build products in the submitted source archive.
+`Note` stores UUID, title, text, RTF data, generated/edited ranges, processed source snapshots and update time. `NotesStore` writes atomic `Documents/notes.json` inside the Simulator app sandbox. Earlier prototype drafts migrate without deleting the original preferences. ConnectionProfile is a Codable custom struct: JSONEncoder stores Data in UserDefaults and JSONDecoder restores it. The selected-note ID is also in UserDefaults. There are no embedded credentials, model weights, user notes or build products in the submitted source archive.
 
 Settled passages are considered independently. Work waits briefly for typing to settle, sends a bounded source/context snapshot to Ollama `/api/chat`, checks the structured response and source, then inserts editable content below the author's writing. Changed/paused work is cancelled or rejected when stale. The inline pulsing cue is a UIKit view, not saved document text; Reduce Motion uses static dots.
 

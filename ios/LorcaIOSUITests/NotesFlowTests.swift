@@ -1,6 +1,21 @@
 import XCTest
 
 final class NotesFlowTests:XCTestCase {
+    @MainActor func testConnectionProfileCodableRelaunch() throws {
+        let app=XCUIApplication();app.launch()
+        XCTAssertTrue(app.textViews["noteEditor"].waitForExistence(timeout:10))
+        app.buttons["Connection Settings"].tap()
+        let model=app.textFields["modelName"]
+        XCTAssertTrue(model.waitForExistence(timeout:5))
+        model.tap();model.typeText(String(repeating:XCUIKeyboardKey.delete.rawValue,count:50)+"qwen3:14b")
+        app.buttons["Test & Connect"].tap()
+        XCTAssertTrue(app.staticTexts.containing(NSPredicate(format:"label BEGINSWITH 'Connected ·'")).firstMatch.waitForExistence(timeout:15))
+        app.terminate();app.launch()
+        XCTAssertTrue(app.textViews["noteEditor"].waitForExistence(timeout:10))
+        app.buttons["Connection Settings"].tap()
+        XCTAssertEqual(app.textFields["modelName"].value as? String,"qwen3:14b")
+        XCTAssertEqual(app.textFields["serverAddress"].value as? String,"http://127.0.0.1:11434")
+    }
     @MainActor func testNotesSettingsTabsPreserveEditor() throws {
         let app=XCUIApplication();app.launch()
         let editor=app.textViews["noteEditor"]

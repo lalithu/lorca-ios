@@ -241,7 +241,8 @@ final class ConnectionSettingsViewController:UIViewController {
     @IBOutlet private weak var modelField:UITextField!
     @IBOutlet private weak var statusLabel:UILabel!
     @IBOutlet private weak var connectButton:UIButton!
-    private var testing:Task<Void,Never>?
+    private var testing:URLSessionDataTask?
+    private var connectionAttempt=UUID()
     override func viewDidLoad(){super.viewDidLoad();let profile=ConnectionProfile();addressField.text=profile.address;modelField.text=profile.model;statusLabel.text="Connect to Ollama on your Mac. Notes always save on this iPhone.";addressField.accessibilityIdentifier="serverAddress";modelField.accessibilityIdentifier="modelName"
         navigationItem.largeTitleDisplayMode = .never
         var connectStyle:UIButton.Configuration
@@ -254,18 +255,20 @@ final class ConnectionSettingsViewController:UIViewController {
     @IBAction private func connect(_ sender:Any){
         var profile=ConnectionProfile();profile.address=addressField.text?.trimmingCharacters(in:.whitespacesAndNewlines) ?? "";profile.model=modelField.text?.trimmingCharacters(in:.whitespacesAndNewlines) ?? ""
         guard !profile.model.isEmpty else{statusLabel.text="Enter an installed model name.";return}
+        testing?.cancel();connectionAttempt=UUID();let attempt=connectionAttempt
+        profile.save()
         view.endEditing(true);connectButton.isEnabled=false;statusLabel.text="Connecting…";UserDefaults.standard.set(false,forKey:"lorca.ios.connected")
-        testing=Task{[weak self] in
+        testing=LocalModelClient.test(profile) { [weak self] result in
+            guard let self,self.connectionAttempt==attempt else { return }
             do{
-                let models=try await LocalModelClient.test(profile)
-                guard !Task.isCancelled else{return}
+                let models=try result.get()
                 guard models.contains(profile.model) || models.contains(profile.model+":latest") else{throw NotesError("Connected to Ollama, but ‘\(profile.model)’ is not installed. Available: "+models.joined(separator:", "))}
-                UserDefaults.standard.set(true,forKey:"lorca.ios.connected");self?.statusLabel.text="Connected · "+profile.model+"\nYou can return to your notes."
-            }catch{self?.statusLabel.text=error.localizedDescription}
-            self?.connectButton.isEnabled=true
+                UserDefaults.standard.set(true,forKey:"lorca.ios.connected");self.statusLabel.text="Connected · "+profile.model+"\nYou can return to your notes."
+            }catch{self.statusLabel.text=error.localizedDescription}
+            self.connectButton.isEnabled=true
         }
     }
-    @IBAction private func disconnect(_ sender:Any){testing?.cancel();UserDefaults.standard.set(false,forKey:"lorca.ios.connected");statusLabel.text="Disconnected. Your notes remain saved and editable.";connectButton.isEnabled=true}
+    @IBAction private func disconnect(_ sender:Any){connectionAttempt=UUID();testing?.cancel();UserDefaults.standard.set(false,forKey:"lorca.ios.connected");statusLabel.text="Disconnected. Your notes remain saved and editable.";connectButton.isEnabled=true}
     @IBAction private func done(_ sender:Any){
         view.endEditing(true)
         if let tabBarController { tabBarController.selectedIndex=0 }

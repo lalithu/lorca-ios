@@ -23,10 +23,10 @@ Based on the Unit 8/9 overview, lab and project screenshots/text supplied by the
 
 - UIKit/Storyboard, Auto Layout, labels/buttons, table view and navigation controller are implemented. A Storyboard root UITabBarController now provides Notes and Settings tabs, retaining the existing editor and settings screens.
 - Swift classes/structs, optionals, typecasting, functions, closures and enum declarations exist. Protocol usage extends beyond table views (UITextViewDelegate, PHPickerViewControllerDelegate and UISearchResultsUpdating).
-- URLSession calls Ollama's local HTTP API; decoded structs drive inline results. Exa is the public search API integration. The public search flow needs clear demonstration if graded separately from local inference.
-- Stored callbacks demonstrate escaping closure behavior, but there is no explicit custom `@escaping` completion API in this implementation. This evidence question remains open.
-- Custom Note data is Codable and persists to JSON files; UserDefaults stores settings and selected-note ID. A custom Codable type persisted specifically through UserDefaults is not yet demonstrated.
-- Async/await is used; Canvas permits it only after satisfying the other requirements. The evidence questions above must not be marked resolved merely by adding tabs.
+- URLSession calls Ollama's local HTTP API; decoded structs drive inline results. Exa is the public search API integration. `LocalModelClient.search` calls the public `https://mcp.exa.ai/mcp` endpoint using URLSession, parses JSON/SSE response envelopes into Decodable SearchResponse/Payload/Content structs, and supplies returned text to the local model; the resulting sourced contribution is inserted in the note UI. It is only invoked when the model requests research; not every note performs public search.
+- `LocalModelClient.test(_:completion:)` explicitly accepts an `@escaping` Result completion closure, performs URLSession.dataTask, decodes model structs, and delivers the result on the main queue. Settings uses this callback; Disconnect cancels and fences old callbacks.
+- `ConnectionProfile: Codable` encodes the address/model custom struct to Data using JSONEncoder, stores it under `lorca.ios.connectionProfile.v1` in UserDefaults and restores it with JSONDecoder when Settings/app launches. Legacy preference values remain a migration fallback. Notes retain file-based Codable persistence.
+- Async/await remains in model generation and research. The connection integration separately demonstrates the required completion-handler pattern.
 - Class presentation: **four minutes maximum**, walkthrough/code structure/improvements; attendance at **both demo days** is required. The separate usage-video deliverable has no stated duration limit in the supplied page.
 - Main video remains linked; a short supplementary clip should show the newly added tabs and unchanged note when switching back. Do not claim that this newer UI appears in the original recording.
 
@@ -37,6 +37,9 @@ The former chat/pairing specification remains historical, not a claim that every
 The required/optional lists are the student's app specification, not a universal course-mandated list of specific app capabilities. Changing that specification is documented explicitly.
 
 ## Verification and limits
+
+- Final Canvas additions: Storyboard Notes/Settings tab switching preserved note content. After reopening Ollama, the explicit escaping-completion connection check and Codable/UserDefaults address/model restoration across relaunch passed. The first connection attempt failed while Ollama was not listening; no server-independent success is claimed.
+
 
 - Xcode Simulator builds succeeded, most recently after the cursor/footer fixes.
 - Real local `qwen3:14b` flow passed: connection, authored-text preservation, generated inline content, progress cue appearing/clearing, and saved note reopening after relaunch.

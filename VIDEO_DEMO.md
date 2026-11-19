@@ -22,3 +22,5 @@ Keep waiting time brief or trim it in the recording; the response shown must be 
 ## Short navigation addendum after the full recording
 
 Record approximately 20–30 seconds: show Notes, tap the bottom Settings tab, show the connection fields, then tap Notes and show the same note. Say: “I added a Storyboard UITabBarController with Notes and Settings tabs. Each tab retains its navigation state, and switching back preserves my note.” Add the supplemental URL above the full demo in README. The eight-minute usage video remains valid evidence for the existing features; the class presentation separately has a four-minute maximum.
+
+For the same addendum, mention: “The connection profile uses Codable and UserDefaults. Test & Connect uses URLSession with an escaping completion closure. Ollama supplies the local model API; Exa supplies public web search.” These implementations are mapped in README's technical rubric table.
