@@ -62,7 +62,7 @@ Pause briefly or start a new paragraph. Three pulsing dots appear beside the pas
 
 ## Demo videos
 
-**Milestone 2 — current Notes app:** recording pending. The new video link will be placed here **before submission**, above both earlier videos. See the [simple recording checklist](VIDEO_DEMO.md).
+**Milestone 2 — current Notes app:** [Watch the capstone demo](https://www.youtube.com/watch?v=OmjLkg07w2c) — approximately 8 minutes, recorded and uploaded by the student. This is the latest demo; both earlier videos remain below.
 
 Earlier videos are retained as milestone history:
 
@@ -123,7 +123,7 @@ Verified on iPhone 16 Pro Simulator / iOS 18: successful build, real `qwen3:14b`
 - [x] Current README, sprint update, required/optional feature list, setup and video instructions.
 - [x] Milestone 1 planning, hand sketch, digital wireframes and both old videos preserved.
 - [x] Public repository readable by instructor **aslowle1** without an invitation.
-- [ ] Record/upload the new demo; insert its link above the older videos.
+- [x] New demo recorded/uploaded and linked above the older videos.
 - [ ] Student submits the repository and video through **Canvas**, per Andros’s email, and checks the CodePath Unit 9 submission entry.
 - [ ] Confirm submission receipt. Due **November 18, 2026, 11:59 p.m. EST** per the supplied Unit 9 page.
 

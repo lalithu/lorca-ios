@@ -12,7 +12,7 @@ Based on the Unit 8/9 overview, lab and project screenshots/text supplied by the
 | Supporting documents / flowcharts | README, SPRINT_PLAN, implementation guide, video guide, preserved planning and wireframe sheets. |
 | Updated sprint / completed feature checkboxes | README and current section of SPRINT_PLAN. |
 | Buildable downloadable Xcode project | `ios/LorcaIOS.xcodeproj`, shared LorcaIOS scheme, source/assets/storyboard/plist, no third-party packages. Simulator setup in README. |
-| New video above old videos; preserve old video | Both earlier links remain in README; new recording/link is **pending student action**. |
+| New video above old videos; preserve old video | [New capstone demo](https://www.youtube.com/watch?v=OmjLkg07w2c) appears above both preserved earlier videos in README. |
 | Submit GitHub repo on Canvas | **Pending student action**; instructor email specifies Canvas. Unit 9 page also has a CodePath Submit entry to check. |
 | Instructor GitHub access: aslowle1 | Repository is public; unauthenticated read access is available without an invitation. |
 | Deadline | Supplied Unit 9 page: November 18, 2026, 11:59 p.m. EST; instructor email says midnight tonight. |
@@ -36,7 +36,7 @@ The required/optional lists are the student's app specification, not a universal
 
 ## Outstanding before submission
 
-Record/upload the new demo, insert its link above old videos, submit the repo/video and confirm receipt. These are not completed by packaging source.
+The student recorded and uploaded the new demo; its link is above the old videos. Submit the repo/video and confirm receipt. Submission itself is not completed by packaging source.
 
 ## Supplied course references
 

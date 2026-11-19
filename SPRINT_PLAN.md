@@ -6,7 +6,7 @@ Completed: saved editable notes; real model connection and inline help; independ
 
 Verification: Simulator build, live qwen3:14b generation/persistence and progress checks, and focused cursor check passed. Organization/checklists should be shown in the final demo; not every edge case is covered. See REQUIREMENTS_REVIEW.md for limits.
 
-Remaining: student records a new video, adds its link above earlier videos, submits through Canvas/checks CodePath and saves receipt. Deadline supplied: November 18, 2026, 11:59 p.m. EST.
+Video completed: [Milestone 2 capstone demo](https://www.youtube.com/watch?v=OmjLkg07w2c), approximately 8 minutes, is linked above the earlier videos in README. Remaining: student submits through Canvas/checks CodePath and saves receipt. Deadline supplied: November 18, 2026, 11:59 p.m. EST.
 
 ---
 
