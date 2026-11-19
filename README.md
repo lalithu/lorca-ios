@@ -62,6 +62,8 @@ Pause briefly or start a new paragraph. Three pulsing dots appear beside the pas
 
 ## Demo videos
 
+**Tab-bar update:** the app now includes Storyboard-based Notes and Settings tabs to satisfy the Canvas rubric. The eight-minute video below predates this small navigation addition. A short supplemental clip showing both tabs and returning to the same note is pending; keep the full demo and earlier videos.
+
 **Milestone 2 — current Notes app:** [Watch the capstone demo](https://www.youtube.com/watch?v=OmjLkg07w2c) — approximately 8 minutes, recorded and uploaded by the student. This is the latest demo; both earlier videos remain below.
 
 Earlier videos are retained as milestone history:
@@ -95,15 +97,17 @@ AI inference runs on the **Mac**, not on the simulated iPhone. Ordinary note edi
 
 ## Screens and navigation
 
-Launch opens the last selected note, or an empty note on first use. **Notes** is the writing canvas; **New note** creates another. The upper-left list icon opens **Saved notes**, with search and swipe actions. The upper-right gear opens modal **Connection Settings**; Done returns to the same note. The keyboard toolbar offers Undo, Redo, screenshot import, and Done. **Model following** opens pause/resume and retry controls.
+Launch opens the last selected note, or an empty note on first use. **Notes** is the writing canvas; **New note** creates another. The upper-left list icon opens **Saved notes**, with search and swipe actions. The bottom **Notes** and **Settings** tabs switch between the editor and connection setup. The upper-right gear also selects Settings; Done returns to Notes without replacing the current note. The keyboard toolbar offers Undo, Redo, screenshot import, and Done. **Model following** opens pause/resume and retry controls.
 
-All three core scenes are in [Main.storyboard](ios/LorcaIOS/Base.lproj/Main.storyboard), with UIKit, Auto Layout and a navigation controller. No tab bar is needed for this flow.
+All three core screens and the root **UITabBarController** are in [Main.storyboard](ios/LorcaIOS/Base.lproj/Main.storyboard), with UIKit, Auto Layout and navigation controllers. Each tab retains its own navigation stack.
 
 ```mermaid
 flowchart LR
-    Launch --> Canvas[Notes canvas]
+    Launch --> Tabs[Notes / Settings tabs]
+    Tabs --> Canvas[Notes canvas]
+    Tabs --> Settings[Connection Settings]
     Canvas <--> Saved[Saved notes / search]
-    Canvas <--> Settings[Connection Settings]
+    Canvas <--> Settings
     Saved <--> Settings
     Canvas --> New[New note]
     New --> Canvas
@@ -116,6 +120,10 @@ flowchart LR
 Verified on iPhone 16 Pro Simulator / iOS 18: successful build, real `qwen3:14b` connection and inline generation, progress cue appearing/clearing, original-text preservation, relaunch persistence, and cursor focus/tap-to-edit. Other implemented paths have not all been exhaustively tested; no physical-device or iOS 26 glass preview is claimed.
 
 [Actual Simulator screenshot](docs/images/notes-inline.png) · [Architecture / data details](ios/README.md)
+
+## Canvas rubric clarification
+
+The final Canvas page explicitly requires a `UITabBarController`; Notes and Settings tabs were added after the main demo recording. The original CodePath feature/video checklist remains covered. See REQUIREMENTS_REVIEW.md for the newly supplied technical checklist and remaining evidence questions. Prepare a **four-minute maximum class presentation** covering walkthrough, code structure and improvements, and attend both demo days. The page does not state a maximum duration for the separately uploaded usage video.
 
 ## Submission status
 

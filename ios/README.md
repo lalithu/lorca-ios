@@ -6,12 +6,12 @@
 
 - Open `LorcaIOS.xcodeproj`; scheme **LorcaIOS**; choose an installed iPhone Simulator; ⌘R.
 - Xcode 26+ SDK is required to compile guarded native glass button styles. Deployment target: iOS 17. Verified build: Xcode 27.2, iOS 18 Simulator.
-- UIKit, Main.storyboard, Auto Layout, UINavigationController, UITableView, UITextView, native alerts and Photos picker. Light mode. No SwiftUI or third-party app dependencies.
+- UIKit, Main.storyboard, Auto Layout, UITabBarController, UINavigationController, UITableView, UITextView, native alerts and Photos picker. Light mode. No SwiftUI or third-party app dependencies.
 - Ollama runs on the Mac at `http://127.0.0.1:11434`. Use `qwen3:4b` for the smaller documented setup; `qwen3:14b` was used in the live acceptance check. Set the exact model in Settings.
 
 ## Source map
 
-- `AppDelegate.swift`: scene lifecycle, Storyboard launch, light mode.
+- `AppDelegate.swift`: scene lifecycle, Storyboard tab-controller launch, light mode.
 - `Base.lproj/Main.storyboard`: Notes list, editor and Connection Settings, outlets/actions and Auto Layout.
 - `Controllers.swift`: navigation, native editing controls, connection UI, Photos import and Vision OCR.
 - `NotesEngine.swift`: local storage/migration, passage selection, model requests, optional research, inline formatting/checklists, progress and undo behavior.

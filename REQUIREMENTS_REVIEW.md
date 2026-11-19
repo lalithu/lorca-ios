@@ -7,7 +7,7 @@ Based on the Unit 8/9 overview, lab and project screenshots/text supplied by the
 | UIKit and Storyboard (student's course constraint) | `ios/LorcaIOS/Base.lproj/Main.storyboard`, native controllers, navigation and Auto Layout; no SwiftUI imports. |
 | At least 3 required + 1 optional feature | Current README: R1–R4 notes/persistence, connection, inline help and organization; O1 checkable lists plus screenshot OCR and research. |
 | App overview/evaluation | Current README describes the revised product; original Mobile/Story/Market/Habit/Scope evaluation in `docs/milestone-1.md`. |
-| Feature, screen and navigation specification | Current README and flow diagram; three core Storyboard screens. No mandatory tab bar appears in the supplied instructions. |
+| Feature, screen and navigation specification | Current README and flow diagram; three core Storyboard screens. The subsequently supplied Canvas rubric explicitly requires a tab bar; the root Storyboard UITabBarController now provides Notes and Settings tabs. |
 | Brainstorming and hand sketches | Existing `brainstorming.md` and `wireframes/hand-sketch-main.jpg` retained. |
 | Supporting documents / flowcharts | README, SPRINT_PLAN, implementation guide, video guide, preserved planning and wireframe sheets. |
 | Updated sprint / completed feature checkboxes | README and current section of SPRINT_PLAN. |
@@ -18,6 +18,17 @@ Based on the Unit 8/9 overview, lab and project screenshots/text supplied by the
 | Deadline | Supplied Unit 9 page: November 18, 2026, 11:59 p.m. EST; instructor email says midnight tonight. |
 | Bonus digital wireframes | Four existing PNG sheets included; award is instructor's decision. |
 | Bonus interactive prototype GIF | Not created or claimed; optional in the supplied Unit 8 material. |
+
+## Canvas technical requirements supplied after the main demo
+
+- UIKit/Storyboard, Auto Layout, labels/buttons, table view and navigation controller are implemented. A Storyboard root UITabBarController now provides Notes and Settings tabs, retaining the existing editor and settings screens.
+- Swift classes/structs, optionals, typecasting, functions, closures and enum declarations exist. Protocol usage extends beyond table views (UITextViewDelegate, PHPickerViewControllerDelegate and UISearchResultsUpdating).
+- URLSession calls Ollama's local HTTP API; decoded structs drive inline results. Exa is the public search API integration. The public search flow needs clear demonstration if graded separately from local inference.
+- Stored callbacks demonstrate escaping closure behavior, but there is no explicit custom `@escaping` completion API in this implementation. This evidence question remains open.
+- Custom Note data is Codable and persists to JSON files; UserDefaults stores settings and selected-note ID. A custom Codable type persisted specifically through UserDefaults is not yet demonstrated.
+- Async/await is used; Canvas permits it only after satisfying the other requirements. The evidence questions above must not be marked resolved merely by adding tabs.
+- Class presentation: **four minutes maximum**, walkthrough/code structure/improvements; attendance at **both demo days** is required. The separate usage-video deliverable has no stated duration limit in the supplied page.
+- Main video remains linked; a short supplementary clip should show the newly added tabs and unchanged note when switching back. Do not claim that this newer UI appears in the original recording.
 
 ## Scope revision
 

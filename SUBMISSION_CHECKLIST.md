@@ -10,6 +10,13 @@
 - [x] Public GitHub repository provides read access to instructor `aslowle1`.
 - [x] Portfolio post prepared and linked from README.
 
+## Canvas technical audit follow-up
+
+- [x] Storyboard UITabBarController added with Notes and Settings tabs.
+- [ ] Record/link a short tab-navigation addendum; keep the full usage video.
+- [ ] Resolve the custom Codable/UserDefaults and explicit escaping-closure evidence questions described in REQUIREMENTS_REVIEW.md.
+- [ ] Prepare the four-minute maximum class presentation and attend both demo days.
+
 ## Final hand-in
 
 - [x] Student recorded the [new capstone demo](https://www.youtube.com/watch?v=OmjLkg07w2c) (approximately 8 minutes).

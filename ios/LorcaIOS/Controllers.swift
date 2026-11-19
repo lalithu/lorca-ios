@@ -134,7 +134,9 @@ final class NoteEditorViewController:UIViewController,PHPickerViewControllerDele
         NSLayoutConstraint.activate([editor.leadingAnchor.constraint(equalTo:editorContainer.leadingAnchor),editor.trailingAnchor.constraint(equalTo:editorContainer.trailingAnchor),editor.topAnchor.constraint(equalTo:editorContainer.topAnchor),editor.bottomAnchor.constraint(equalTo:editorContainer.bottomAnchor)])
         // Keep the storyboard's editor/status region above the software keyboard.
         view.constraints.filter{$0.identifier=="editor-bottom"}.forEach{$0.isActive=false}
-        statusButton.bottomAnchor.constraint(equalTo:view.keyboardLayoutGuide.topAnchor,constant:-8).isActive=true
+        let keyboardBottom=statusButton.bottomAnchor.constraint(equalTo:view.keyboardLayoutGuide.topAnchor,constant:-8)
+        keyboardBottom.priority = .defaultHigh;keyboardBottom.isActive=true
+        statusButton.bottomAnchor.constraint(lessThanOrEqualTo:view.safeAreaLayoutGuide.bottomAnchor,constant:-8).isActive=true
         let toolbar=UIToolbar();toolbar.sizeToFit()
         let toolbarAppearance=UIToolbarAppearance();toolbarAppearance.configureWithDefaultBackground()
         toolbarAppearance.backgroundColor = .systemBackground
@@ -169,7 +171,7 @@ final class NoteEditorViewController:UIViewController,PHPickerViewControllerDele
         document.editor.becomeFirstResponder()
         document.editor.scrollRangeToVisible(document.editor.selectedRange)
     }
-    override func viewWillDisappear(_ animated:Bool){super.viewWillDisappear(animated);document.save()}
+    override func viewWillDisappear(_ animated:Bool){super.viewWillDisappear(animated);view.endEditing(true);document.save()}
     private func updateStatus(_ text:String) {
         updateWordCount()
         let busy=text=="Thinking…" || text=="Reading image…"
@@ -264,6 +266,14 @@ final class ConnectionSettingsViewController:UIViewController {
         }
     }
     @IBAction private func disconnect(_ sender:Any){testing?.cancel();UserDefaults.standard.set(false,forKey:"lorca.ios.connected");statusLabel.text="Disconnected. Your notes remain saved and editable.";connectButton.isEnabled=true}
-    @IBAction private func done(_ sender:Any){dismiss(animated:true)}
+    @IBAction private func done(_ sender:Any){
+        view.endEditing(true)
+        if let tabBarController { tabBarController.selectedIndex=0 }
+        else { dismiss(animated:true) }
+    }
 }
-private func presentSettings(from controller:UIViewController){controller.present(controller.storyboard!.instantiateViewController(withIdentifier:"SettingsNavigation"),animated:true)}
+private func presentSettings(from controller:UIViewController){
+    controller.view.endEditing(true)
+    if let tabs=controller.tabBarController { tabs.selectedIndex=1 }
+    else { controller.present(controller.storyboard!.instantiateViewController(withIdentifier:"SettingsNavigation"),animated:true) }
+}

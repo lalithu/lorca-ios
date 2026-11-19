@@ -1,5 +1,7 @@
 # Milestone 2 sprint result — November 18, 2026
 
+Final Canvas rubric update: added a Storyboard root UITabBarController with Notes and Settings tabs. The main demo predates this addition; a short navigation addendum is pending. Other newly identified technical evidence questions are tracked in REQUIREMENTS_REVIEW.md.
+
 The final scope is **Simulator-first notes**, built with UIKit and Storyboard. The original chat/physical-phone transport plan below is preserved as history. Direct Mac-local Ollama replaces the proposed pairing adapter; no authenticated phone connection is claimed.
 
 Completed: saved editable notes; real model connection and inline help; independent settled passages; native editable model formatting and amber human edits; undo/redo; checklist completion sorting; screenshot OCR; optional Exa research; search/rename/confirmed deletion; passage-level progress; simplified light canvas and reliable tap-to-edit focus.

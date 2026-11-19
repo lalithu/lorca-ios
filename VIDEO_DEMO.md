@@ -18,3 +18,7 @@ Keep waiting time brief or trim it in the recording; the response shown must be 
 - Put its URL in README's **Milestone 2 — current Notes app** entry above the two older videos. Keep both older videos.
 - Check the recording box in README and SUBMISSION_CHECKLIST.md; commit/push the link.
 - Submit `https://github.com/lalithu/lorca-ios` and the video URL through Canvas per Andros's email. Check whether CodePath also needs the Unit 9 entry and accurate hours. Save the receipt.
+
+## Short navigation addendum after the full recording
+
+Record approximately 20–30 seconds: show Notes, tap the bottom Settings tab, show the connection fields, then tap Notes and show the same note. Say: “I added a Storyboard UITabBarController with Notes and Settings tabs. Each tab retains its navigation state, and switching back preserves my note.” Add the supplemental URL above the full demo in README. The eight-minute usage video remains valid evidence for the existing features; the class presentation separately has a four-minute maximum.

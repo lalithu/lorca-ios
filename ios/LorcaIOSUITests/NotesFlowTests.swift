@@ -1,6 +1,24 @@
 import XCTest
 
 final class NotesFlowTests:XCTestCase {
+    @MainActor func testNotesSettingsTabsPreserveEditor() throws {
+        let app=XCUIApplication();app.launch()
+        let editor=app.textViews["noteEditor"]
+        XCTAssertTrue(editor.waitForExistence(timeout:10))
+        let original=editor.value as? String
+        app.toolbars.buttons["Done"].tap()
+        XCTAssertTrue(app.tabBars.buttons["Settings"].isHittable)
+        app.tabBars.buttons["Settings"].tap()
+        XCTAssertTrue(app.textFields["serverAddress"].waitForExistence(timeout:5))
+        app.tabBars.buttons["Notes"].tap()
+        XCTAssertTrue(editor.waitForExistence(timeout:5))
+        XCTAssertEqual(editor.value as? String,original)
+        app.buttons["Connection Settings"].tap()
+        XCTAssertTrue(app.textFields["modelName"].waitForExistence(timeout:5))
+        app.navigationBars.buttons["Done"].tap()
+        XCTAssertTrue(editor.waitForExistence(timeout:5))
+        let image=XCTAttachment(screenshot:app.screenshot());image.name="Notes and Settings tabs";image.lifetime = .keepAlways;add(image)
+    }
     @MainActor func testOpenSavedNotePreview() throws {
         let app=XCUIApplication();app.launch()
         XCTAssertTrue(app.textViews["noteEditor"].waitForExistence(timeout:10))
