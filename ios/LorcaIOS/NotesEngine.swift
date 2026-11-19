@@ -365,6 +365,21 @@ struct Passage {
         storage.enumerateAttribute(.userEdit,in:range) { value,span,_ in if value != nil { storage.addAttribute(.foregroundColor,value:UIColor.systemOrange,range:span) } }
         let heading=try! NSRegularExpression(pattern:#"(?m)^#{1,4} +.+$"#)
         for m in heading.matches(in:storage.string,range:range) { storage.addAttribute(.font,value:UIFont.preferredFont(forTextStyle:.headline),range:m.range) }
+        // Display common model Markdown using native text attributes. Keep
+        // the underlying document editable; no HTML or web view is involved.
+        func conceal(_ r:NSRange) { if r.length>0 { storage.addAttributes([.foregroundColor:UIColor.clear,.font:UIFont.systemFont(ofSize:0.1)],range:r) } }
+        let bold=try! NSRegularExpression(pattern:#"\*\*([^\n]+?)\*\*"#)
+        for match in bold.matches(in:storage.string,range:range) {
+            storage.addAttribute(.font,value:UIFont.preferredFont(forTextStyle:.headline),range:match.range(at:1))
+            conceal(NSRange(location:match.range.location,length:2));conceal(NSRange(location:NSMaxRange(match.range)-2,length:2))
+        }
+        let dollars=try! NSRegularExpression(pattern:#"\${1,2}"#)
+        for match in dollars.matches(in:storage.string,range:range) { conceal(match.range) }
+        for match in heading.matches(in:storage.string,range:range) {
+            let raw=(storage.string as NSString).substring(with:match.range)
+            let count=raw.prefix(while:{$0=="#" || $0==" "}).count
+            conceal(NSRange(location:match.range.location,length:count))
+        }
         let checks=try! NSRegularExpression(pattern:#"(?m)^☑ .+$"#)
         for m in checks.matches(in:storage.string,range:range) { storage.addAttributes([.foregroundColor:UIColor.secondaryLabel,.strikethroughStyle:1],range:m.range) }
         editor.selectedRange=selection

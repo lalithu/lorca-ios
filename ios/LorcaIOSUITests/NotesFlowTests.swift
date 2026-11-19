@@ -1,6 +1,13 @@
 import XCTest
 
 final class NotesFlowTests:XCTestCase {
+    @MainActor func testOpenSavedNotePreview() throws {
+        let app=XCUIApplication();app.launch()
+        XCTAssertTrue(app.tables["notesList"].cells.firstMatch.waitForExistence(timeout:10))
+        app.tables["notesList"].cells.firstMatch.tap()
+        XCTAssertTrue(app.textViews["noteEditor"].waitForExistence(timeout:5))
+        let image=XCTAttachment(screenshot:app.screenshot());image.name="Notes preview";image.lifetime = .keepAlways;add(image)
+    }
     @MainActor func testNotesConnectionPersistenceAndRealModel() throws {
         let app=XCUIApplication();app.launch()
         XCTAssertTrue(app.navigationBars["Notes"].waitForExistence(timeout:10))

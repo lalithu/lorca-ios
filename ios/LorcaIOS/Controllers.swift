@@ -98,6 +98,7 @@ final class NoteEditorViewController:UIViewController,PHPickerViewControllerDele
     }
     override func viewWillDisappear(_ animated:Bool){super.viewWillDisappear(animated);document.save()}
     private func updateStatus(_ text:String) {
+        if let note=NotesStore.shared.note(noteID) { title=note.title }
         let busy=text=="Thinking…" || text=="Reading image…"
         statusButton.setTitle(text,for:.normal);statusButton.titleLabel?.numberOfLines=2
         busy ? activity.startAnimating() : activity.stopAnimating()
