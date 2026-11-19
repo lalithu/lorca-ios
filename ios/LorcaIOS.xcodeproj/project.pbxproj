@@ -1,11 +1,28 @@
 // !$*UTF8*$!
 { archiveVersion = 1; classes = {}; objectVersion = 56; objects = {
+
+111111111111111111110001 = { isa = PBXNativeTarget; buildConfigurationList = 111111111111111111110009; buildPhases = (111111111111111111110006,111111111111111111110007,111111111111111111110008); buildRules = (); dependencies = (11111111111111111111000D); name = LorcaIOSUITests; productName = LorcaIOSUITests; productReference = 111111111111111111110002; productType = "com.apple.product-type.bundle.ui-testing"; };
+111111111111111111110002 = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = LorcaIOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+111111111111111111110003 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesFlowTests.swift; sourceTree = "<group>"; };
+111111111111111111110004 = {isa = PBXBuildFile; fileRef = 111111111111111111110003; };
+111111111111111111110005 = {isa = PBXGroup; children = (111111111111111111110003); path = LorcaIOSUITests; sourceTree = "<group>"; };
+111111111111111111110006 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (111111111111111111110004); runOnlyForDeploymentPostprocessing = 0; };
+111111111111111111110007 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+111111111111111111110008 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+111111111111111111110009 = {isa = XCConfigurationList; buildConfigurations = (11111111111111111111000A,11111111111111111111000B); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+11111111111111111111000C = {isa = PBXContainerItemProxy; containerPortal = 000000000000000000000001; proxyType = 1; remoteGlobalIDString = 000000000000000000000005; remoteInfo = LorcaIOS; };
+11111111111111111111000D = {isa = PBXTargetDependency; target = 000000000000000000000005; targetProxy = 11111111111111111111000C; };
+11111111111111111111000A = {isa = XCBuildConfiguration; buildSettings = {GENERATE_INFOPLIST_FILE = YES; PRODUCT_BUNDLE_IDENTIFIER = org.lalithu.LorcaIOSUITests; PRODUCT_NAME = "$(TARGET_NAME)"; TEST_TARGET_NAME = LorcaIOS; TARGETED_DEVICE_FAMILY = "1,2"; SWIFT_VERSION = 5.0; CODE_SIGN_STYLE = Automatic; }; name = Debug; };
+11111111111111111111000B = {isa = XCBuildConfiguration; buildSettings = {GENERATE_INFOPLIST_FILE = YES; PRODUCT_BUNDLE_IDENTIFIER = org.lalithu.LorcaIOSUITests; PRODUCT_NAME = "$(TARGET_NAME)"; TEST_TARGET_NAME = LorcaIOS; TARGETED_DEVICE_FAMILY = "1,2"; SWIFT_VERSION = 5.0; CODE_SIGN_STYLE = Automatic; }; name = Release; };
+
+000000000000000000000110 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesEngine.swift; sourceTree = "<group>"; };
+000000000000000000000111 = {isa = PBXBuildFile; fileRef = 000000000000000000000110; };
 000000000000000000000100 = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 000000000000000000000101 = {isa = PBXBuildFile; fileRef = 000000000000000000000100; };
-000000000000000000000001 = { isa = PBXProject; attributes = { LastUpgradeCheck = 2700; }; buildConfigurationList = 000000000000000000000011; compatibilityVersion = "Xcode 14.0"; developmentRegion = en; knownRegions = (en, Base); mainGroup = 000000000000000000000002; productRefGroup = 000000000000000000000004; projectDirPath = ""; projectRoot = ""; targets = (000000000000000000000005); };
-000000000000000000000002 = { isa = PBXGroup; children = (000000000000000000000003, 000000000000000000000004); sourceTree = "<group>"; };
-000000000000000000000003 = { isa = PBXGroup; children = (00000000000000000000000A, 00000000000000000000000B, 00000000000000000000000C, 00000000000000000000000D, 000000000000000000000100); path = LorcaIOS; sourceTree = "<group>"; };
-000000000000000000000004 = { isa = PBXGroup; children = (000000000000000000000006); name = Products; sourceTree = "<group>"; };
+000000000000000000000001 = { isa = PBXProject; attributes = { LastUpgradeCheck = 2700; }; buildConfigurationList = 000000000000000000000011; compatibilityVersion = "Xcode 14.0"; developmentRegion = en; knownRegions = (en, Base); mainGroup = 000000000000000000000002; productRefGroup = 000000000000000000000004; projectDirPath = ""; projectRoot = ""; targets = (000000000000000000000005,111111111111111111110001); };
+000000000000000000000002 = { isa = PBXGroup; children = (111111111111111111110005,000000000000000000000003, 000000000000000000000004); sourceTree = "<group>"; };
+000000000000000000000003 = { isa = PBXGroup; children = (000000000000000000000110, 00000000000000000000000A, 00000000000000000000000B, 00000000000000000000000C, 00000000000000000000000D, 000000000000000000000100); path = LorcaIOS; sourceTree = "<group>"; };
+000000000000000000000004 = { isa = PBXGroup; children = (000000000000000000000006,111111111111111111110002); name = Products; sourceTree = "<group>"; };
 000000000000000000000006 = { isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LorcaIOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 00000000000000000000000A = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate.swift"; sourceTree = "<group>"; };
 00000000000000000000000B = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Controllers.swift"; sourceTree = "<group>"; };
@@ -14,7 +31,7 @@
 00000000000000000000000E = { isa = PBXBuildFile; fileRef = 00000000000000000000000A; };
 00000000000000000000000F = { isa = PBXBuildFile; fileRef = 00000000000000000000000B; };
 000000000000000000000010 = { isa = PBXBuildFile; fileRef = 00000000000000000000000C; };
-000000000000000000000007 = { isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (00000000000000000000000E,00000000000000000000000F); runOnlyForDeploymentPostprocessing = 0; };
+000000000000000000000007 = { isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (000000000000000000000111,00000000000000000000000E,00000000000000000000000F); runOnlyForDeploymentPostprocessing = 0; };
 000000000000000000000008 = { isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (000000000000000000000010, 000000000000000000000101); runOnlyForDeploymentPostprocessing = 0; };
 000000000000000000000009 = { isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
 000000000000000000000005 = { isa = PBXNativeTarget; buildConfigurationList = 000000000000000000000012; buildPhases = (000000000000000000000007,000000000000000000000009,000000000000000000000008); buildRules = (); dependencies = (); name = LorcaIOS; productName = LorcaIOS; productReference = 000000000000000000000006; productType = "com.apple.product-type.application"; };

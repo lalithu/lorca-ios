@@ -1,193 +1,173 @@
 import UIKit
+import PhotosUI
+import Vision
 
-struct Conversation: Codable {
-    let id: UUID
-    var title: String
-    var draft: String
-}
-
-final class ConversationStore {
-    static let shared = ConversationStore()
-    private let key = "lorca.ios.conversations.v1"
-    private(set) var conversations: [Conversation] = []
-
-    private init() {
-        if let data = UserDefaults.standard.data(forKey: key),
-           let saved = try? JSONDecoder().decode([Conversation].self, from: data) {
-            conversations = saved
-        }
-    }
-
-    @discardableResult func create() -> UUID {
-        let item = Conversation(id: UUID(), title: "New conversation", draft: "")
-        conversations.insert(item, at: 0)
-        save()
-        return item.id
-    }
-
-    func item(_ id: UUID) -> Conversation? { conversations.first { $0.id == id } }
-    func rename(_ id: UUID, title: String) {
-        guard let index = conversations.firstIndex(where: { $0.id == id }) else { return }
-        conversations[index].title = title
-        save()
-    }
-    func updateDraft(_ id: UUID, draft: String) {
-        guard let index = conversations.firstIndex(where: { $0.id == id }) else { return }
-        conversations[index].draft = draft
-        save()
-    }
-    func delete(_ id: UUID) {
-        conversations.removeAll { $0.id == id }
-        save()
-    }
-    private func save() {
-        if let data = try? JSONEncoder().encode(conversations) {
-            UserDefaults.standard.set(data, forKey: key)
-        }
-    }
-}
-
-final class ConversationsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    @IBOutlet private weak var tableView: UITableView!
-    @IBOutlet private weak var emptyLabel: UILabel!
-    private let store = ConversationStore.shared
-
+final class NotesViewController:UIViewController,UITableViewDataSource,UITableViewDelegate,UISearchResultsUpdating {
+    @IBOutlet private weak var tableView:UITableView!
+    @IBOutlet private weak var emptyLabel:UILabel!
+    private let search=UISearchController(searchResultsController:nil)
+    private var visible:[Note]=[]
     override func viewDidLoad() {
-        super.viewDidLoad()
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Conversation")
-        tableView.accessibilityIdentifier = "conversationList"
+        super.viewDidLoad();title="Notes"
+        navigationController?.navigationBar.prefersLargeTitles=true
+        tableView.dataSource=self;tableView.delegate=self;tableView.rowHeight=84
+        tableView.register(UITableViewCell.self,forCellReuseIdentifier:"Note")
+        tableView.accessibilityIdentifier="notesList"
+        search.searchResultsUpdater=self;search.obscuresBackgroundDuringPresentation=false;search.searchBar.placeholder="Search notes"
+        navigationItem.searchController=search;definesPresentationContext=true
+        NotificationCenter.default.addObserver(self,selector:#selector(reload),name:.notesChanged,object:nil)
+        reload()
     }
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        tableView.reloadData()
-        emptyLabel.isHidden = !store.conversations.isEmpty
+    override func viewWillAppear(_ animated:Bool) { super.viewWillAppear(animated);reload() }
+    deinit { NotificationCenter.default.removeObserver(self) }
+    @objc private func reload() {
+        let query=search.searchBar.text ?? ""
+        visible=NotesStore.shared.notes.filter{query.isEmpty || $0.title.localizedCaseInsensitiveContains(query) || $0.text.localizedCaseInsensitiveContains(query)}
+        tableView.reloadData();emptyLabel.isHidden = !visible.isEmpty
+        emptyLabel.text=NotesStore.shared.error ?? (query.isEmpty ? "Your thoughts, with room to grow.\nTap + to write your first note." : "No matching notes.")
     }
-    @IBAction private func newChat(_ sender: Any) {
-        showChat(store.create())
+    func updateSearchResults(for searchController:UISearchController) { reload() }
+    @IBAction private func newNote(_ sender:Any) { show(NotesStore.shared.create().id) }
+    @IBAction private func settings(_ sender:Any) { presentSettings(from:self) }
+    private func show(_ id:UUID) {
+        let vc=storyboard!.instantiateViewController(withIdentifier:"NoteEditor") as! NoteEditorViewController
+        vc.noteID=id;navigationController?.pushViewController(vc,animated:true)
     }
-    private func showChat(_ id: UUID) {
-        let chat = storyboard!.instantiateViewController(withIdentifier: "Chat") as! ChatViewController
-        chat.conversationID = id
-        navigationController?.pushViewController(chat, animated: true)
+    func tableView(_ tableView:UITableView,numberOfRowsInSection section:Int)->Int { visible.count }
+    func tableView(_ tableView:UITableView,cellForRowAt indexPath:IndexPath)->UITableViewCell {
+        let note=visible[indexPath.row],cell=tableView.dequeueReusableCell(withIdentifier:"Note",for:indexPath)
+        var content=cell.defaultContentConfiguration();content.text=note.title;content.textProperties.font = .preferredFont(forTextStyle:.headline)
+        let preview=note.text.split(whereSeparator:\.isNewline).dropFirst().prefix(2).joined(separator:" ")
+        content.secondaryText=DateFormatter.localizedString(from:note.updatedAt,dateStyle:.short,timeStyle:.short)+(preview.isEmpty ? " · Empty note" : " · "+preview)
+        content.secondaryTextProperties.numberOfLines=2;content.secondaryTextProperties.color = .secondaryLabel
+        cell.contentConfiguration=content;cell.accessoryType = .disclosureIndicator;return cell
     }
-    @IBAction private func settings(_ sender: Any) { presentSettings(from: self) }
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { store.conversations.count }
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let item = store.conversations[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Conversation", for: indexPath)
-        var config = cell.defaultContentConfiguration()
-        config.text = item.title
-        config.secondaryText = item.draft.isEmpty ? "No messages yet • local conversation" : "Draft: \(item.draft)"
-        config.secondaryTextProperties.numberOfLines = 2
-        cell.contentConfiguration = config
-        cell.accessoryType = .disclosureIndicator
-        return cell
-    }
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        showChat(store.conversations[indexPath.row].id)
-    }
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let item = store.conversations[indexPath.row]
-        let rename = UIContextualAction(style: .normal, title: "Rename") { [weak self] _, _, done in
-            self?.rename(item); done(true)
+    func tableView(_ tableView:UITableView,didSelectRowAt indexPath:IndexPath) { tableView.deselectRow(at:indexPath,animated:true);show(visible[indexPath.row].id) }
+    func tableView(_ tableView:UITableView,trailingSwipeActionsConfigurationForRowAt indexPath:IndexPath)->UISwipeActionsConfiguration? {
+        let note=visible[indexPath.row]
+        let rename=UIContextualAction(style:.normal,title:"Rename") { [weak self] _,_,done in
+            let alert=UIAlertController(title:"Rename note",message:nil,preferredStyle:.alert)
+            alert.addTextField{$0.text=note.title}
+            alert.addAction(UIAlertAction(title:"Cancel",style:.cancel))
+            alert.addAction(UIAlertAction(title:"Save",style:.default){[weak alert] _ in
+                guard var current=NotesStore.shared.note(note.id),let title=alert?.textFields?.first?.text?.trimmingCharacters(in:.whitespacesAndNewlines),!title.isEmpty else{return}
+                current.title=String(title.prefix(80));NotesStore.shared.update(current)
+            });self?.present(alert,animated:true);done(true)
         }
         rename.backgroundColor = .systemBlue
-        let delete = UIContextualAction(style: .destructive, title: "Delete") { [weak self] _, _, done in
-            self?.confirmDelete(item); done(true)
+        let delete=UIContextualAction(style:.destructive,title:"Delete") { [weak self] _,_,done in
+            let alert=UIAlertController(title:"Delete note?",message:"Delete ‘\(note.title)’ from this iPhone? This does not change your Mac notes.",preferredStyle:.alert)
+            alert.addAction(UIAlertAction(title:"Cancel",style:.cancel));alert.addAction(UIAlertAction(title:"Delete",style:.destructive){_ in NotesStore.shared.delete(note.id)})
+            self?.present(alert,animated:true);done(true)
         }
-        let actions = UISwipeActionsConfiguration(actions: [delete, rename])
-        actions.performsFirstActionWithFullSwipe = false
-        return actions
-    }
-    private func rename(_ item: Conversation) {
-        let alert = UIAlertController(title: "Rename conversation", message: "Choose a title for this local conversation.", preferredStyle: .alert)
-        alert.addTextField { $0.text = item.title; $0.placeholder = "Conversation title" }
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Save", style: .default) { [weak self, weak alert] _ in
-            guard let title = alert?.textFields?.first?.text?.trimmingCharacters(in: .whitespacesAndNewlines), !title.isEmpty else { return }
-            self?.store.rename(item.id, title: title)
-            self?.tableView.reloadData()
-        })
-        present(alert, animated: true)
-    }
-    private func confirmDelete(_ item: Conversation) {
-        let alert = UIAlertController(title: "Delete conversation?", message: "Delete ‘\(item.title)’ from this iPhone? Your Mac library is unchanged.", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
-            self?.store.delete(item.id)
-            self?.tableView.reloadData()
-            self?.emptyLabel.isHidden = !(self?.store.conversations.isEmpty ?? true)
-        })
-        present(alert, animated: true)
+        let actions=UISwipeActionsConfiguration(actions:[delete,rename]);actions.performsFirstActionWithFullSwipe=false;return actions
     }
 }
 
-final class ChatViewController: UIViewController, UITextViewDelegate {
-    var conversationID: UUID!
-    @IBOutlet private weak var draftView: UITextView!
-    @IBOutlet private weak var draftStatus: UILabel!
-    @IBOutlet private weak var sendButton: UIButton!
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        let item = ConversationStore.shared.item(conversationID)
-        title = item?.title ?? "Chat"
-        draftView.text = item?.draft ?? ""
-        draftView.delegate = self
-        draftView.layer.cornerRadius = 12
-        draftView.layer.borderColor = UIColor.separator.cgColor
-        draftView.layer.borderWidth = 1
-        draftView.accessibilityLabel = "Message draft"
-        draftView.accessibilityIdentifier = "messageDraft"
-        sendButton.isEnabled = false
-        draftStatus.text = draftView.text.isEmpty ? "Write a message below. Drafts save on this iPhone." : "Draft restored from this iPhone."
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(dismissKeyboard))
-    }
-    @objc private func dismissKeyboard() { draftView.resignFirstResponder() }
-    func textViewDidChange(_ textView: UITextView) {
-        ConversationStore.shared.updateDraft(conversationID, draft: textView.text)
-        draftStatus.text = "Draft saved on this iPhone."
-    }
-    @IBAction private func connectionSettings(_ sender: Any) {
-        draftView.resignFirstResponder()
-        presentSettings(from: self)
+@MainActor enum NoteDocuments {
+    static var documents:[UUID:NoteDocument]=[:]
+    static func get(_ id:UUID)->NoteDocument {
+        if let document=documents[id] { return document }
+        let document=NoteDocument(NotesStore.shared.note(id)!);documents[id]=document;return document
     }
 }
 
-final class ConnectionSettingsViewController: UIViewController {
-    @IBOutlet private weak var addressField: UITextField!
-    @IBOutlet private weak var statusLabel: UILabel!
+final class NoteEditorViewController:UIViewController,PHPickerViewControllerDelegate {
+    var noteID:UUID!
+    @IBOutlet private weak var editorContainer:UIView!
+    @IBOutlet private weak var statusButton:UIButton!
+    @IBOutlet private weak var activity:UIActivityIndicatorView!
+    private var document:NoteDocument!
     override func viewDidLoad() {
-        super.viewDidLoad()
-        addressField.text = UserDefaults.standard.string(forKey: "lorca.ios.macAddress")
-        addressField.accessibilityIdentifier = "macAddress"
-        updateStatus()
+        super.viewDidLoad();document=NoteDocuments.get(noteID);title=NotesStore.shared.note(noteID)?.title ?? "Note"
+        navigationItem.largeTitleDisplayMode = .never
+        let editor=document.editor;editor.removeFromSuperview();editor.translatesAutoresizingMaskIntoConstraints=false;editorContainer.addSubview(editor)
+        NSLayoutConstraint.activate([editor.leadingAnchor.constraint(equalTo:editorContainer.leadingAnchor),editor.trailingAnchor.constraint(equalTo:editorContainer.trailingAnchor),editor.topAnchor.constraint(equalTo:editorContainer.topAnchor),editor.bottomAnchor.constraint(equalTo:editorContainer.bottomAnchor)])
+        // Keep the storyboard's editor/status region above the software keyboard.
+        view.constraints.filter{$0.identifier=="editor-bottom"}.forEach{$0.isActive=false}
+        statusButton.bottomAnchor.constraint(equalTo:view.keyboardLayoutGuide.topAnchor,constant:-8).isActive=true
+        let toolbar=UIToolbar();toolbar.sizeToFit()
+        let undo=UIBarButtonItem(image:UIImage(systemName:"arrow.uturn.backward"),style:.plain,target:self,action:#selector(undo))
+        let redo=UIBarButtonItem(image:UIImage(systemName:"arrow.uturn.forward"),style:.plain,target:self,action:#selector(redo))
+        toolbar.items=[undo,redo,.flexibleSpace(),UIBarButtonItem(title:"Done",style:.done,target:self,action:#selector(done))]
+        editor.inputAccessoryView=toolbar
+        document.statusChanged={ [weak self] text in self?.updateStatus(text) }
+        updateStatus(document.status);document.begin()
+        navigationItem.rightBarButtonItems=[UIBarButtonItem(image:UIImage(systemName:"photo"),style:.plain,target:self,action:#selector(photo)),UIBarButtonItem(image:UIImage(systemName:"gearshape"),style:.plain,target:self,action:#selector(settings))]
+        if editor.text.isEmpty { editor.becomeFirstResponder() }
     }
-    @IBAction private func saveAddress(_ sender: Any) {
-        let address = addressField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        guard !address.isEmpty else {
-            statusLabel.text = "Enter a Mac address first."
-            return
+    override func viewWillDisappear(_ animated:Bool){super.viewWillDisappear(animated);document.save()}
+    private func updateStatus(_ text:String) {
+        let busy=text=="Thinking…" || text=="Reading image…"
+        statusButton.setTitle(text,for:.normal);statusButton.titleLabel?.numberOfLines=2
+        busy ? activity.startAnimating() : activity.stopAnimating()
+        statusButton.accessibilityLabel=text
+    }
+    @IBAction private func modelOptions(_ sender:Any) {
+        let menu=UIAlertController(title:"Model following",message:document.status,preferredStyle:.actionSheet)
+        menu.addAction(UIAlertAction(title:document.paused ? "Resume" : "Pause",style:.default){[weak self] _ in guard let self else{return};self.document.paused.toggle()})
+        menu.addAction(UIAlertAction(title:"Retry failed work",style:.default){[weak self] _ in self?.document.retry()})
+        menu.addAction(UIAlertAction(title:"Connection Settings",style:.default){[weak self] _ in self?.settings()})
+        menu.addAction(UIAlertAction(title:"Cancel",style:.cancel));menu.popoverPresentationController?.sourceView=statusButton;present(menu,animated:true)
+    }
+    @objc private func undo(){document.editor.undoManager?.undo();document.save()}
+    @objc private func redo(){document.editor.undoManager?.redo();document.save()}
+    @objc private func done(){document.editor.resignFirstResponder()}
+    @objc private func settings(){presentSettings(from:self)}
+    @objc private func photo(){
+        var configuration=PHPickerConfiguration();configuration.filter = .images;configuration.selectionLimit=1
+        let picker=PHPickerViewController(configuration:configuration);picker.delegate=self;present(picker,animated:true)
+    }
+    func picker(_ picker:PHPickerViewController,didFinishPicking results:[PHPickerResult]) {
+        picker.dismiss(animated:true)
+        guard let provider=results.first?.itemProvider,provider.canLoadObject(ofClass:UIImage.self) else{return}
+        let document=self.document!
+        updateStatus("Reading image…")
+        provider.loadObject(ofClass:UIImage.self){[weak self] object,error in
+            guard let image=object as? UIImage,let cg=image.cgImage else{return}
+            let request=VNRecognizeTextRequest();request.recognitionLevel = .accurate
+            do {
+                try VNImageRequestHandler(cgImage:cg).perform([request])
+                let text=(request.results ?? []).compactMap{$0.topCandidates(1).first?.string}.joined(separator:"\n")
+                Task{@MainActor in
+                    guard self != nil else{return}
+                    guard !text.isEmpty else{self?.updateStatus("No readable text found. Try a clearer screenshot.");return}
+                    let attachment=NSTextAttachment()
+                    let scale=min(1,300/max(image.size.width,image.size.height))
+                    let target=CGSize(width:image.size.width*scale,height:image.size.height*scale)
+                    attachment.image=UIGraphicsImageRenderer(size:target).image{_ in image.draw(in:CGRect(origin:.zero,size:target))}
+                    attachment.bounds=CGRect(origin:.zero,size:target)
+                    let content=NSMutableAttributedString(string:"\n\nImage\n")
+                    content.append(NSAttributedString(attachment:attachment));content.append(NSAttributedString(string:"\n\nSummarize this screenshot:\n"+String(text.prefix(4000))+"\n\n"))
+                    document.replace(document.editor.selectedRange,with:content);document.begin()
+                }
+            }catch{Task{@MainActor in self?.updateStatus("Could not read the screenshot. Your note is saved.")}}
         }
-        UserDefaults.standard.set(address, forKey: "lorca.ios.macAddress")
-        addressField.resignFirstResponder()
-        statusLabel.text = "Address saved. Connection is not implemented yet."
-    }
-    @IBAction private func disconnect(_ sender: Any) {
-        UserDefaults.standard.removeObject(forKey: "lorca.ios.macAddress")
-        addressField.text = ""
-        statusLabel.text = "Saved address cleared. Not connected."
-    }
-    @IBAction private func done(_ sender: Any) { dismiss(animated: true) }
-    private func updateStatus() {
-        statusLabel.text = (addressField.text?.isEmpty == false) ? "Saved address restored. Not connected." : "Not connected. Mac integration is coming next."
     }
 }
 
-private func presentSettings(from controller: UIViewController) {
-    let navigation = controller.storyboard!.instantiateViewController(withIdentifier: "SettingsNavigation")
-    controller.present(navigation, animated: true)
+final class ConnectionSettingsViewController:UIViewController {
+    @IBOutlet private weak var addressField:UITextField!
+    @IBOutlet private weak var modelField:UITextField!
+    @IBOutlet private weak var statusLabel:UILabel!
+    @IBOutlet private weak var connectButton:UIButton!
+    private var testing:Task<Void,Never>?
+    override func viewDidLoad(){super.viewDidLoad();let profile=ConnectionProfile();addressField.text=profile.address;modelField.text=profile.model;statusLabel.text="Connect to Ollama on your Mac. Notes always save on this iPhone.";addressField.accessibilityIdentifier="serverAddress";modelField.accessibilityIdentifier="modelName"}
+    @IBAction private func connect(_ sender:Any){
+        var profile=ConnectionProfile();profile.address=addressField.text?.trimmingCharacters(in:.whitespacesAndNewlines) ?? "";profile.model=modelField.text?.trimmingCharacters(in:.whitespacesAndNewlines) ?? ""
+        guard !profile.model.isEmpty else{statusLabel.text="Enter an installed model name.";return}
+        view.endEditing(true);connectButton.isEnabled=false;statusLabel.text="Connecting…";UserDefaults.standard.set(false,forKey:"lorca.ios.connected")
+        testing=Task{[weak self] in
+            do{
+                let models=try await LocalModelClient.test(profile)
+                guard !Task.isCancelled else{return}
+                guard models.contains(profile.model) || models.contains(profile.model+":latest") else{throw NotesError("Connected to Ollama, but ‘\(profile.model)’ is not installed. Available: "+models.joined(separator:", "))}
+                UserDefaults.standard.set(true,forKey:"lorca.ios.connected");self?.statusLabel.text="Connected · "+profile.model+"\nYou can return to your notes."
+            }catch{self?.statusLabel.text=error.localizedDescription}
+            self?.connectButton.isEnabled=true
+        }
+    }
+    @IBAction private func disconnect(_ sender:Any){testing?.cancel();UserDefaults.standard.set(false,forKey:"lorca.ios.connected");statusLabel.text="Disconnected. Your notes remain saved and editable.";connectButton.isEnabled=true}
+    @IBAction private func done(_ sender:Any){dismiss(animated:true)}
 }
+private func presentSettings(from controller:UIViewController){controller.present(controller.storyboard!.instantiateViewController(withIdentifier:"SettingsNavigation"),animated:true)}

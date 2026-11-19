@@ -1,3 +1,55 @@
+# Lorca iOS — Milestone 2
+
+A lightweight **UIKit + Storyboard** notes app in light mode. Write naturally; a model running on your Mac helps inline, without a separate chat screen.
+
+## November 18, 2026 sprint update
+
+**Scope change:** Milestone 1 planned a local-model chat companion. Milestone 2 keeps that Mac-hosted inference and saved-history foundation, but makes notes the main interface. The original Milestone 1 submission, planning, wireframes and videos are preserved below. This is an iOS implementation inspired by my existing macOS Lorca Notes work, not the macOS UI or Rust runtime copied onto iPhone.
+
+### Required features
+
+- [x] Create, edit and reopen notes saved on the iPhone, including offline.
+- [x] Configure a Mac/Ollama endpoint and model; test the actual connection and show failures.
+- [x] Receive real, editable model additions underneath the original writing. Independent settled passages can run while another is edited. Pause and retry controls are available.
+- [x] Organize notes with search, rename and confirmed deletion.
+
+### Optional features
+
+- [x] Checkable model task lists; completed items move below unchecked items.
+- [x] Screenshot import through the system photo picker and on-device text recognition.
+- [x] Current-information lookup through Exa for passages requiring web sources.
+- [x] Human edits inside model additions are amber; edited blocks lose their blue background.
+- [ ] Full on-device model inference, desktop-note synchronization, and the original iMessage stretch feature.
+- [ ] Event-flyer calendar export and full visual photo captioning from the macOS version.
+
+### Build verification
+
+Xcode Simulator build succeeded. One real UI acceptance flow on iPhone 16 Pro / iOS 18 connected to the installed `qwen3:14b` on the Mac, generated an inline counting/permutations study guide, terminated/relaunched the app, and reopened the saved result. It passed in approximately 40 seconds. Additional paths are implemented; this is not a claim of exhaustive device testing.
+
+### Next deliverables
+
+- [ ] Record a **new** Milestone 2 demo and place its link here, above the old videos.
+- [ ] Finish submission packaging and final documentation review.
+- [ ] Submit the repository link and video through Canvas as requested by Andros; check the CodePath submission entry too.
+
+The new video has **not** been recorded or uploaded yet. Do not use the old prototype video as evidence of the new features.
+
+### Screens and navigation
+
+Notes list (stream/search) → Note editor (detail/creation) → Back to saved notes. Settings is modal from either screen and returns to the same note. Rename and Delete use native alerts. Photo import uses the system picker. There is no tab bar. The three core screens and their layout are in `Main.storyboard`, with native UIKit controllers and Auto Layout.
+
+### Data and networking
+
+`Note` stores UUID, title, authored/model text, RTF formatting, generated ranges, completed input snapshots and update time in atomic phone-local JSON. Previous prototype drafts migrate without deleting their original preferences. `ConnectionProfile` stores only the server address and model name; there is no account/password in this capstone. The app uses `URLSession` to call Ollama `/api/tags` and `/api/chat`. Requests are bounded and tool-free. Research sends only a query to Exa and supplies returned evidence to the local model. Model-generated text remains fallible and editable.
+
+### Run it
+
+Open [ios/LorcaIOS.xcodeproj](ios/LorcaIOS.xcodeproj), choose the LorcaIOS scheme, and Run on an installed iPhone Simulator. No third-party packages. Follow [the instructor setup guide](ios/README.md) for the local model and physical-device networking.
+
+---
+
+## Milestone 1 — preserved submission history
+
 # Lorca for iOS
 
 An original UIKit / Storyboard companion to [Lorca](https://github.com/lalithu/lorca).
