@@ -62,9 +62,9 @@ Pause briefly or start a new paragraph. Three pulsing dots appear beside the pas
 
 ## Demo videos
 
-**Tab-bar update:** the app now includes Storyboard-based Notes and Settings tabs to satisfy the Canvas rubric. The eight-minute video below predates this small navigation addition. A short supplemental clip showing both tabs and returning to the same note is pending; keep the full demo and earlier videos.
+**Latest updated capstone video:** [Watch the final demo](https://www.youtube.com/watch?v=lsd-frASyuI). This updated recording supersedes the earlier Notes demo and accompanies the final tab-bar/Codable/API-completion changes.
 
-**Milestone 2 — current Notes app:** [Watch the capstone demo](https://www.youtube.com/watch?v=OmjLkg07w2c) — approximately 8 minutes, recorded and uploaded by the student. This is the latest demo; both earlier videos remain below.
+**Earlier Milestone 2 demo:** [Original Notes demo](https://www.youtube.com/watch?v=OmjLkg07w2c) — approximately 8 minutes. Preserved as progress history.
 
 Earlier videos are retained as milestone history:
 

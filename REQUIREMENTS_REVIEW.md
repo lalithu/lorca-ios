@@ -12,7 +12,7 @@ Based on the Unit 8/9 overview, lab and project screenshots/text supplied by the
 | Supporting documents / flowcharts | README, SPRINT_PLAN, implementation guide, video guide, preserved planning and wireframe sheets. |
 | Updated sprint / completed feature checkboxes | README and current section of SPRINT_PLAN. |
 | Buildable downloadable Xcode project | `ios/LorcaIOS.xcodeproj`, shared LorcaIOS scheme, source/assets/storyboard/plist, no third-party packages. Simulator setup in README. |
-| New video above old videos; preserve old video | [New capstone demo](https://www.youtube.com/watch?v=OmjLkg07w2c) appears above both preserved earlier videos in README. |
+| New video above old videos; preserve old video | [Latest updated capstone demo](https://www.youtube.com/watch?v=lsd-frASyuI) appears above both preserved earlier videos in README. |
 | Submit GitHub repo on Canvas | **Pending student action**; instructor email specifies Canvas. Unit 9 page also has a CodePath Submit entry to check. |
 | Instructor GitHub access: aslowle1 | Repository is public; unauthenticated read access is available without an invitation. |
 | Deadline | Supplied Unit 9 page: November 18, 2026, 11:59 p.m. EST; instructor email says midnight tonight. |
@@ -28,7 +28,7 @@ Based on the Unit 8/9 overview, lab and project screenshots/text supplied by the
 - `ConnectionProfile: Codable` encodes the address/model custom struct to Data using JSONEncoder, stores it under `lorca.ios.connectionProfile.v1` in UserDefaults and restores it with JSONDecoder when Settings/app launches. Legacy preference values remain a migration fallback. Notes retain file-based Codable persistence.
 - Async/await remains in model generation and research. The connection integration separately demonstrates the required completion-handler pattern.
 - Class presentation: **four minutes maximum**, walkthrough/code structure/improvements; attendance at **both demo days** is required. The separate usage-video deliverable has no stated duration limit in the supplied page.
-- Main video remains linked; a short supplementary clip should show the newly added tabs and unchanged note when switching back. Do not claim that this newer UI appears in the original recording.
+- Updated video supplied by the student: https://www.youtube.com/watch?v=lsd-frASyuI. It is linked first in README, with the original Notes demo and both Milestone 1 videos retained. Video contents have not been independently reviewed end to end.
 
 ## Scope revision
 

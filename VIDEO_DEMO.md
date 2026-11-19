@@ -1,5 +1,7 @@
 # Milestone 2 video
 
+**Latest updated demo:** [Watch final recording](https://www.youtube.com/watch?v=lsd-frASyuI). Linked first in README; prior recordings remain preserved.
+
 **Recorded demo:** [Watch on YouTube](https://www.youtube.com/watch?v=OmjLkg07w2c) — approximately 8 minutes. The outline below was a recording aid, not a required duration.
 
 Before recording: run Ollama, install/select the model, open the app in Simulator, and keep the model warm. Use **File → Open Simulator** in Xcode if necessary. No physical phone is needed.

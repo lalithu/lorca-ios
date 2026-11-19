@@ -13,7 +13,7 @@
 ## Canvas technical audit follow-up
 
 - [x] Storyboard UITabBarController added with Notes and Settings tabs.
-- [ ] Record/link a short tab-navigation addendum; keep the full usage video.
+- [x] Updated final video supplied and linked first in README: https://www.youtube.com/watch?v=lsd-frASyuI. Earlier demos retained.
 - [x] Codable ConnectionProfile is stored/restored through UserDefaults; the URLSession connection check uses an explicit @escaping completion closure. Public Exa response parsing is documented.
 - [ ] Prepare the four-minute maximum class presentation and attend both demo days.
 
